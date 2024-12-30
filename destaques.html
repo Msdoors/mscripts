@@ -217,8 +217,7 @@
     <script>
         async function fetchHighlights() {
             try {
-                // Substitua esta URL pelo caminho do seu arquivo JSON no GitHub
-                const response = await fetch('URL_DO_SEU_JSON_NO_GITHUB');
+                const response = await fetch('https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/scripts-highlightsjson');
                 const data = await response.json();
                 
                 const highlightsContainer = document.getElementById('highlights');
