@@ -3,9 +3,9 @@
     {
       "id": 1,
       "title": "Msdoors",
-      "description": "Um incrível script de doors em desenvolvimento, criado pelo dono deste site.",
-      "image": "https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/logo.png",
-      "downloadUrl": "https://mscripts.vercel.app/scripts/msdoors.html",
+      "description": "Um script simples feito para alguns jogos simples.",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/favcon-pre.jpg",
+      "downloadUrl": "https://msdoors.vercel.app/",
       "verified": true,
       "fixed": true,
       "author": "Rhyan57",
