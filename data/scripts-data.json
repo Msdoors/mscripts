@@ -2,7 +2,7 @@
   "scripts": [
     {
       "id": 1,
-      "title": "RseekerHub",
+      "title": "Msdoors",
       "description": "Um incrível script de doors em desenvolvimento, criado pelo dono deste site.",
       "image": "https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/logo.png",
       "downloadUrl": "https://seekerwebs.github.io/scripts/RSeekerHub.html",
@@ -29,7 +29,7 @@
       "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/no-banner.jpg",
       "downloadUrl": "https://seekerwebs.github.io/scripts/mspaint.html",
       "verified": true,
-      "fixed": true,
+      "fixed": false,
       "author": "Rhyan57",
       "authorId": "896604349311115304"
     }
