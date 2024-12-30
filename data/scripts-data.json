@@ -1,0 +1,26 @@
+{
+  "scripts": [
+    {
+      "id": 1,
+      "title": "RseekerHub",
+      "description": "Um incrível script de doors em desenvolvimento, criado pelo dono deste site.",
+      "image": "https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/logo.png",
+      "downloadUrl": "https://seekerwebs.github.io/scripts/RSeekerHub.html",
+      "verified": true,
+      "fixed": true,
+      "author": "Rhyan57",
+      "authorId": "Owner"
+    },
+    {
+      "id": 2,
+      "title": "Fly Script",
+      "description": "Script de voo para seus jogos favoritos!",
+      "image": "https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/Noft.png",
+      "downloadUrl": "https://seekerwebs.github.io/scripts/fly-rseeker.html",
+      "verified": true,
+      "fixed": false,
+      "author": "subzxkkj",
+      "authorId": "1206201879839645748"
+    }
+  ]
+}
