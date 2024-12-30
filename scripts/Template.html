@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obter</title>
+    <meta property="og:type" content="Rseeker | teste script">
+    <meta property="og:description" content="Script | RSeeker Scripts - obter Script selecionado.">
+    <meta property="og:url" content="https://seekerwebs.github.io/index.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png" type="image/x-icon">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background-image: url('https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/fundo.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #9B1FC4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #7f8bbf;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #9B1FC4, #9dabff);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: gradient-animation 3s infinite alternate;
+            margin-bottom: 20px;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #ddd;
+            font-size: 1.1rem;
+            text-align: left;
+            word-wrap: break-word; /* Quebra longas palavras */
+            max-height: 150px; /* Limita a altura da caixa */
+            overflow-y: auto; /* Adiciona rolagem se o conteúdo for maior que a altura */
+        }
+
+        .copy-btn {
+            background-color: #9dabff;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .copy-btn:hover {
+            background-color: #7f8bbf;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="https://seekerwebs.github.io/index.html" class="back-btn">Voltar</a>
+
+    <div class="container">
+        <h1>Fly</h1>
+
+        <div class="content-box" id="content"> loadstring(game:HttpGet('https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/scfiles/fly-Rseeker.lua'))()
+        </div>
+
+        <button class="copy-btn" id="copyButton">Copiar</button>
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const content = document.getElementById('content').innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Conteúdo copiado para a área de transferência!');
+            }).catch(err => {
+                console.error('Erro ao copiar: ', err);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
