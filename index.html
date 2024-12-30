@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio | RSeeker Scripts</title>
-    <meta property="og:type" content="Rseeker | Tela Incial">
-    <meta property="og:description" content="Tela Inicial | RSeeker Scripts - O seu site de scripts favorito!">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="RSeeker Scripts">
+    <meta property="og:description" content="O seu site de scripts favorito!">
     <meta property="og:url" content="https://seekerwebs.github.io/index.html">
     <meta property="og:image" content="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/IconFav.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Reset básico */
+        /* Reset e variáveis */
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --accent: #FF006E;
+            --background: #1a1b1e;
+            --surface: #2b2d31;
+            --surface-hover: #33353b;
+            --text: #ffffff;
+            --text-secondary: #B9BBBE;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,350 +32,321 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #101415;
-            color: #7300FF;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
             line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* Barra lateral */
-        .sidebar {
-            height: 100%;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: -250px;
-            background-color: #9B1FC4;
-            transition: 0.3s;
-            padding-top: 60px;
-            z-index: 1001;
-            border-radius: 0 10px 10px 0;
-        }
-
-        .sidebar a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: black;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: #7300FF;
-        }
-
-        .sidebar .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 36px;
-        }
-
-        .open-btn {
-            font-size: 30px;
-            cursor: pointer;
-            background-color: #9B1FC4;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1002;
-            transition: background-color 0.3s;
-            border-radius: 5px;
-        }
-
-        .open-btn:hover {
-            background-color: #7300FF;
-        }
-
-        /* Cabeçalho */
-        header {
-            background: linear-gradient(90deg, #9B1FC4, #7300FF);
-            color: black;
-            padding: 20px 0;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: black;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        nav ul li a:hover {
-            background-color: rgba(128, 0, 128, 1);
-        }
-
-        /* Seção do Banner */
-        .banner {
-            background-image: url('https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/fundo.png');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-        }
-
-        .banner h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .banner p {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .banner button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #7300FF;
-            border: none;
-            border-radius: 10px;
-            color: black;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .banner button:hover {
-            background-color: #9B1FC4;
-            transform: scale(1.1);
-        }
-
-        /* Seção de Destaques */
-        .highlights {
-            padding: 40px 20px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            background-color: #101415;
-        }
-
-        .highlight {
-            background-color: #9B1FC4;
-            color: black;
-            padding: 20px;
-            width: 30%;
-            margin: 10px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .highlight:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .highlight i {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-
-        /* Carrossel de Imagens */
-        .carousel {
-            display: flex;
             overflow-x: hidden;
-            scroll-behavior: smooth;
-            margin-top: 20px;
         }
 
-        .carousel img {
-            width: 300px;
-            height: 200px;
-            margin-right: 10px;
-            border-radius: 10px;
-            transition: transform 0.3s;
-        }
-
-        .carousel img:hover {
-            transform: scale(1.1);
-        }
-
-        /* Rodapé */
-        footer {
-            background-color: #101415;
-            color: black;
-            padding: 20px;
-            text-align: center;
-        }
-
-        footer ul {
-            list-style: none;
-        }
-
-        footer ul li {
-            margin: 10px 0;
-        }
-
-        footer ul li a {
-            color: white;
-            text-decoration: none;
-        }
-
-        footer ul li a:hover {
-            text-decoration: underline;
-        }
-
-        /* Estilos para a tela de carregamento */
+        /* Animação de carregamento moderna */
         #loadingScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* Fundo preto com opacidade */
-            z-index: 9999; /* Coloca o overlay acima de todo o conteúdo */
+            background: var(--background);
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease-out;
+            z-index: 9999;
         }
 
-        #loadingScreen img {
-            width: 150px;
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--surface);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
         }
 
-        /* Oculta a tela após o carregamento */
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         #loadingScreen.fade-out {
             opacity: 0;
             visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Header moderno estilo Discord */
+        header {
+            background: var(--surface);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 0 rgba(4,4,5,0.2),0 1.5px 0 rgba(6,6,7,0.05),0 2px 0 rgba(4,4,5,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        /* Banner estilo YouTube/Instagram */
+        .banner {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/fundo.png');
+            background-position: center;
+            background-size: cover;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .banner-content {
+            max-width: 800px;
+        }
+
+        .banner h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88,101,242,0.4);
+        }
+
+        /* Cards estilo Play Store */
+        .highlights {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .highlight {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .highlight:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            background: var(--surface-hover);
+        }
+
+        .highlight i {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .highlight p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Footer moderno */
+        footer {
+            background: var(--surface);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        footer ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        footer ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        footer ul li a:hover {
+            color: var(--text);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .banner h1 {
+                font-size: 2.5rem;
+            }
+
+            .banner p {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
-
 <body>
-
     <!-- Tela de carregamento -->
     <div id="loadingScreen">
-        <img src="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/loading.webp" alt="Carregando...">
+        <div class="loader"></div>
     </div>
 
+    <!-- Header -->
     <header>
-        <h1>RSeeker Scripts</h1>
+        <div class="header-container">
+            <h1 class="logo">RSeeker Scripts</h1>
+            <nav>
+                <ul>
+                    <li><a href="#scripts">Scripts</a></li>
+                    <li><a href="https://mscripts.vercel.app/aboutme.html">Sobre Nós</a></li>
+                    <li><a href="https://dsc.gg/betterstar">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <button class="open-btn" onclick="openSidebar()">☰</button>
-
-    <div class="sidebar" id="sidebar">
-        <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()">×</a>
-        
-        <a href="seekerSc.html">Scripts</a>
-        <a href="destaques.html">Destaques</a>
-        <a href="aboutme.html">Sobre Nós</a>
-        <a href="contato.html">Contato</a>
-    </div>
-
-    <!-- Banner Principal -->
+    <!-- Banner -->
     <section class="banner">
-        <div>
+        <div class="banner-content">
             <h1>Descubra os Melhores Scripts</h1>
             <p>Scripts exclusivos para Roblox. Fácil de encontrar e usar!</p>
-            <button onclick="window.location.href='seekerSc.html'">Explorar Agora</button>
+            <a href="https://mscripts.vercel.app/seekerSc.html" class="cta-button">Explorar Agora</a>
         </div>
     </section>
 
     <!-- Destaques -->
-    <section class="highlights">
+    <section class="highlights" id="scripts">
         <div class="highlight">
             <i class="fas fa-gamepad"></i>
             <h3>Scripts de Qualidade</h3>
-            <p>Encontre scripts de alta qualidade para todos os jogos populares do Roblox.</p>
+            <p>Encontre scripts de alta qualidade para jogos do Roblox.</p>
         </div>
         <div class="highlight">
             <i class="fas fa-star"></i>
             <h3>Scripts Testados</h3>
-            <p>Todos os scripts são testados por nossa equipe para garantir a qualidade.</p>
+            <p>Garantimos a funcionalidade de todos os scripts.</p>
         </div>
         <div class="highlight">
             <i class="fas fa-users"></i>
             <h3>Comunidade Ativa</h3>
-            <p>Participe da nossa comunidade e compartilhe seus scripts com outros! jogadores.</p>
+            <p>Compartilhe experiências e aprenda com outros usuários.</p>
         </div>
     </section>
 
-    <!-- Carrossel de Imagens -->
-    <section class="carousel" id="carousel">
-<img src="https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/slides/sd1.jpeg" alt="Slide1">
-        <img src="https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/slides/Sd2.jpeg" alt="Slide2">
-        <img src="https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/slides/sd3.jpeg" alt="Slide3">
-        <img src="https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/slides/Rbx.jpeg" alt="Slide4">
-        <img src="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/loading.webp" alt="Slide5">
-    </section>
-
-    <!-- Rodapé -->
+    <!-- Footer -->
     <footer>
-        <ul>
-            <li><a href="termos/termos.html">Política de Privacidade</a></li>
-            <li><a href="termos/termos.html">Termos de Serviço</a></li>
-            <li><a href="contato.html">Contato</a></li>
-        </ul>
-        <p>&copy; Mscripts 2024-2025 Todos os direitos reservados.</p>
+        <div class="footer-content">
+            <ul>
+                <li><a href="#privacy">Política de Privacidade</a></li>
+                <li><a href="#terms">Termos de Serviço</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+            <p>&copy; RSeeker Scripts 2024. Todos os direitos reservados.</p>
+        </div>
     </footer>
 
     <script>
-        // Função para abrir a barra lateral
-        function openSidebar() {
-            document.getElementById("sidebar").style.left = "0";
-        }
-
-        // Função para fechar a barra lateral
-        function closeSidebar() {
-            document.getElementById("sidebar").style.left = "-250px";
-        }
-
-        // Função para fazer o carrossel rolar automaticamente
-        const carousel = document.getElementById('carousel');
-        let scrollAmount = 0;
-
-        function autoScroll() {
-            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-            if (scrollAmount >= maxScroll) {
-                carousel.scrollTo({ left: 0, behavior: 'smooth' });
-                scrollAmount = 0;
-            } else {
-                scrollAmount += 300; // Largura de uma imagem
-                carousel.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-            }
-        }
-
-        // Intervalo para rolar o carrossel automaticamente a cada 2 segundos
-        setInterval(autoScroll, 2000);
-
-        // Função para esconder a tela de carregamento após 2 segundos
         window.onload = function() {
-            setTimeout(function() {
+            setTimeout(() => {
                 const loadingScreen = document.getElementById('loadingScreen');
                 loadingScreen.classList.add('fade-out');
-                setTimeout(() => loadingScreen.style.display = 'none', 500); // Remove o elemento após o fade
-            }, 2000); // Tempo de exibição da tela de carregamento
+                setTimeout(() => loadingScreen.style.display = 'none', 500);
+            }, 1500);
         };
     </script>
-
 </body>
-
 </html>
