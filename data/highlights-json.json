@@ -1,0 +1,46 @@
+{
+  "scripts": [
+    {
+      "id": 1,
+      "title": "Doors Script Pro",
+      "description": "Script premium para Doors com recursos avançados: ESP, AutoFarm, Item Spawner e muito mais. Atualizado semanalmente com novos recursos.",
+      "image": "URL_DA_IMAGEM_DOORS",
+      "downloadUrl": "/scripts/doors-pro.html",
+      "verified": true,
+      "fixed": true,
+      "author": "MasterDev",
+      "authorId": "owner123",
+      "category": "Horror",
+      "views": 15240,
+      "downloads": 8563
+    },
+    {
+      "id": 2,
+      "title": "BedWars Ultimate",
+      "description": "O melhor script para BedWars com KillAura, AutoFarm, AutoBuy e proteções anti-ban integradas. Testado e aprovado pela comunidade.",
+      "image": "URL_DA_IMAGEM_BEDWARS",
+      "downloadUrl": "/scripts/bedwars-ultimate.html",
+      "verified": true,
+      "fixed": false,
+      "author": "ProGamer",
+      "authorId": "dev456",
+      "category": "PvP",
+      "views": 12350,
+      "downloads": 6420
+    },
+    {
+      "id": 3,
+      "title": "Ninja Legends X",
+      "description": "Script completo para Ninja Legends com AutoFarm de coins, chi e elementos. Inclui teleports e compra automática de items.",
+      "image": "URL_DA_IMAGEM_NINJA",
+      "downloadUrl": "/scripts/ninja-legends.html",
+      "verified": false,
+      "fixed": true,
+      "author": "ScriptMaster",
+      "authorId": "user789",
+      "category": "Simulador",
+      "views": 9840,
+      "downloads": 4230
+    }
+  ]
+}
