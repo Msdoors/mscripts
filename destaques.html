@@ -1,161 +1,259 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destaques - Rseeker Scripts</title>
-    <meta property="og:type" content="Rseeker | Destaques">
-    <meta property="og:description" content="Destaques | RSeeker Scripts - O seu site de scripts favorito!">
-    <meta property="og:url" content="https://seekerwebs.github.io/index.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/IconFav.png" type="image/x-icon">
+    <title>Destaques - Mscripts</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mscripts | Destaques">
+    <meta property="og:description" content="Os melhores scripts em destaque!">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --accent: #FF006E;
+            --background: #1a1b1e;
+            --surface: #2b2d31;
+            --surface-hover: #33353b;
+            --text: #ffffff;
+            --text-secondary: #B9BBBE;
+        }
+
+        * {
             margin: 0;
-            background-color: #101415;
-            color: #7300FF;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
         }
 
         header {
-            background: linear-gradient(90deg, #9B1FC4, #7300FF);
-            color: #FFFFFF;
-            padding: 20px;
-            text-align: center;
+            background: var(--surface);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 1px 0 rgba(4,4,5,0.2);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
         }
 
         nav ul {
-            list-style: none;
-            padding: 0;
             display: flex;
             justify-content: center;
-            background-color: #7300FF;
-        }
-
-        nav ul li {
-            margin: 0 10px;
+            gap: 1.5rem;
+            list-style: none;
         }
 
         nav ul li a {
-            color: #101415;
+            color: var(--text-secondary);
             text-decoration: none;
-            padding: 10px 15px;
-            display: block;
-            transition: background 0.3s;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         nav ul li a:hover {
-            background-color: #9B1FC4;
+            color: var(--text);
+            background: var(--surface-hover);
         }
 
         .container {
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: black;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            padding: 0 2rem;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
-
-        .highlight-grid {
+        .highlights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .highlight-card {
-            background-color: #101415;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s;
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .highlight-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
         }
 
-        .highlight-card h3 {
-            margin-bottom: 15px;
-            font-size: 22px;
+        .highlight-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
         }
 
-        .highlight-card p {
-            color: #FFFFFF;
-            text-align: justify;
+        .highlight-content {
+            padding: 1.5rem;
+        }
+
+        .highlight-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .highlight-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--surface-hover);
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-verified {
+            background: #43B581;
+            color: white;
+        }
+
+        .badge-fixed {
+            background: #FAA61A;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
         }
 
         footer {
+            background: var(--surface);
+            padding: 2rem;
             text-align: center;
-            padding: 20px;
-            background-color: #101415;
-            color: #9B1FC4;
-            margin-top: 40px;
+            margin-top: 4rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
-
 <body>
-
     <header>
-        <h1>Destaques</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="seekerSc.html">Scripts</a></li>
-                <li><a href="aboutme.html">Sobre</a></li>
-                <li><a href="contato.html">Contato</a></li>
-            </ul>
-        </nav>
+        <div class="header-container">
+            <h1 class="header-title">Destaques</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/scripts.html">Scripts</a></li>
+                    <li><a href="/aboutme.html">Sobre</a></li>
+                    <li><a href="/contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
-<div class="container">
-    <h1>Nossos Destaques</h1>
-    <div class="highlight-grid">
-        <div class="highlight-card">
-            <img src="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/loading.webp" alt="Imagem de destaque" />
-            <h3>Nada 🥲</h3>
-            <p>Este script se destaca pela sua versatilidade e popularidade entre a comunidade, sendo usado em vários jogos Roblox.</p>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-    <div class="highlight-grid">
-        <div class="highlight-card">
-            <img src="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/loading.webp" alt="Imagem de destaque" />
-            <h3>Nada 2 🥲</h3>
-            <p>Este script se destaca pela sua versatilidade e popularidade entre a comunidade, sendo usado em vários jogos Roblox.</p>
+    <div class="container">
+        <div id="highlights" class="highlights-grid">
+            <div class="loading">Carregando destaques...</div>
         </div>
     </div>
-</div>
-
-<div class="container">
-    <div class="highlight-grid">
-        <div class="highlight-card">
-            <img src="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/loading.webp" alt="Imagem de destaque" />
-            <h3>Nada 3 🥲</h3>
-            <p>Este script se destaca pela sua versatilidade e popularidade entre a comunidade, sendo usado em vários jogos Roblox.</p>
-        </div>
-    </div>
-</div>
-      
 
     <footer>
-        <p>&copy; 2024 RSeeker Scripts. Todos os direitos reservados.</p>
+        <p>&copy; Mscripts 2024-2025. Todos os direitos reservados.</p>
     </footer>
 
-</body>
+    <script>
+        async function fetchHighlights() {
+            try {
+                // Substitua esta URL pelo caminho do seu arquivo JSON no GitHub
+                const response = await fetch('URL_DO_SEU_JSON_NO_GITHUB');
+                const data = await response.json();
+                
+                const highlightsContainer = document.getElementById('highlights');
+                highlightsContainer.innerHTML = '';
 
+                data.scripts.forEach(script => {
+                    const card = document.createElement('div');
+                    card.className = 'highlight-card';
+                    card.innerHTML = `
+                        <img src="${script.image}" alt="${script.title}" class="highlight-image">
+                        <div class="highlight-content">
+                            <h3 class="highlight-title">${script.title}</h3>
+                            <p class="highlight-description">${script.description}</p>
+                            <div class="highlight-meta">
+                                <div class="author">
+                                    <i class="fas fa-user"></i>
+                                    <span>${script.author}</span>
+                                </div>
+                                <div class="badges">
+                                    ${script.verified ? '<span class="badge badge-verified">Verificado</span>' : ''}
+                                    ${script.fixed ? '<span class="badge badge-fixed">Fixed</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    highlightsContainer.appendChild(card);
+                });
+            } catch (error) {
+                document.getElementById('highlights').innerHTML = `
+                    <div class="loading">Erro ao carregar os destaques. Tente novamente mais tarde.</div>
+                `;
+            }
+        }
+
+        fetchHighlights();
+    </script>
+</body>
 </html>
