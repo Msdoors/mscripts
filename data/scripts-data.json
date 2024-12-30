@@ -15,7 +15,7 @@
       "id": 2,
       "title": "Fly Script",
       "description": "Script de voo para seus jogos favoritos!",
-      "image": "https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/Noft.png",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/no-banner.jpg",
       "downloadUrl": "https://seekerwebs.github.io/scripts/fly-rseeker.html",
       "verified": true,
       "fixed": false,
@@ -29,7 +29,7 @@
       "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/no-banner.jpg",
       "downloadUrl": "https://seekerwebs.github.io/scripts/mspaint.html",
       "verified": true,
-      "fixed": false,
+      "fixed": true,
       "author": "Rhyan57",
       "authorId": "896604349311115304"
     }
