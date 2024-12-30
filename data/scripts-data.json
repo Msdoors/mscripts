@@ -12,19 +12,6 @@
       "authorId": "896604349311115304"
     },
     {
-      "id": 3,
-      "title": "mspaint v3.5(DEPRECATED VERSION)",
-      "description": "Um script para doors.",
-      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/no-banner.jpg",
-      "downloadUrl": "https://seekerwebs.github.io/scripts/mspaint.html",
-      "verified": true,
-      "fixed": false,
-      "author": "Rhyan57",
-      "authorId": "896604349311115304"
-    }
-  ]
-},
-{
       "id": 2,
       "title": "Fly Script",
       "description": "Script de voo.",
