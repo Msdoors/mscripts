@@ -1,144 +1,369 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suporte - RSeeker Scripts</title>
-    <meta property="og:type" content="Rseeker | Suporte">
-    <meta property="og:description" content="Suporte | RSeeker Scripts - O seu site de scripts favorito!">
-    <meta property="og:url" content="https://seekerwebs.github.io/index.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/IconFav.png" type="image/x-icon">
+    <title>Mscripts | Contato</title>
+    <meta property="og:description" content="Mscripts | Entre em contato conosco!">
+    <meta property="og:url" content="https://mscripts.vercel.app/contato.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #101415;
-            color: #9B1FC4;
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --accent: #FF006E;
+            --background: #1a1b1e;
+            --surface: #2b2d31;
+            --surface-hover: #33353b;
+            --text: #ffffff;
+            --text-secondary: #B9BBBE;
+            --discord: #5865F2;
         }
 
-        header {
-            background-color: #7300FF;
-            color: black;
-            padding: 20px;
-            text-align: center;
-            position: sticky;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
             top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--surface);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Header */
+        header {
+            background: rgba(43, 45, 49, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
             z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         nav ul {
-            list-style: none;
-            padding: 0;
             display: flex;
-            justify-content: center;
-            background-color: #9B1FC4;
+            gap: 2rem;
+            list-style: none;
         }
 
-        nav ul li {
-            margin: 0 10px;
-        }
-
-        nav ul li a {
-            color: white;
+        nav a {
+            color: var(--text-secondary);
             text-decoration: none;
-            padding: 10px 15px;
-            display: block;
-            transition: background 0.3s;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
-        nav ul li a:hover {
-            background-color: #9B1FC4;
+        nav a:hover {
+            color: var(--text);
+            background: var(--surface-hover);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: black;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
-
-        .contact-form {
+        /* Main Content */
+        .contact-container {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
         }
 
-        .contact-form input, 
-        .contact-form textarea {
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+        /* Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .contact-form button {
-            padding: 10px 15px;
-            background-color: #7300FF;
-            color: white;
-            border: none;
-            border-radius: 5px;
+        .particle {
+            position: absolute;
+            background: var(--discord);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Discord Button */
+        .discord-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .discord-button {
+            width: 200px;
+            height: 200px;
+            background: var(--discord);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            font-size: 16px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: hover 3s ease-in-out infinite;
+            box-shadow: 0 0 50px rgba(88, 101, 242, 0.3);
         }
 
-        .contact-form button:hover {
-            background-color: #7300FF;
+        @keyframes hover {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #101415;
+        .pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--discord);
+            opacity: 0.6;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .discord-icon {
+            font-size: 100px;
             color: white;
-            margin-top: 40px;
+            z-index: 2;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .discord-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 80px rgba(88, 101, 242, 0.6);
+        }
+
+        .contact-text {
+            color: var(--text);
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(43, 45, 49, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            text-align: center;
+            z-index: 100;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .discord-button {
+                width: 150px;
+                height: 150px;
+            }
+
+            .discord-icon {
+                font-size: 75px;
+            }
+
+            .contact-text {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
-
 <body>
-
-    <header>
-        <h1>Contato</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="seekerSc.html">Scripts</a></li>
-                <li><a href="destaques.html">Destaques</a></li>
-                <li><a href="aboutme.html">Sobre Nós</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="container">
-        <h1>Entre em Contato Conosco</h1>
-        <p>Se você tiver alguma dúvida, sugestão ou precisar de suporte, por favor, entre em contato conosco preenchendo o formulário abaixo.</p>
-
-        <!-- Formulário de Contato -->
-        <form class="contact-form" action="#" method="post">
-            <input type="text" name="name" placeholder="Seu Nome" required>
-            <input type="email" name="email" placeholder="Seu Email" required>
-            <textarea name="message" rows="5" placeholder="Sua Mensagem" required></textarea>
-            <button type="submit">Enviar Mensagem</button>
-        </form>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loader"></div>
     </div>
 
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <h1 class="logo">Mscripts</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="scripts.html">Scripts</a></li>
+                    <li><a href="aboutme.html">Sobre</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="contact-container">
+        <div id="particles" class="particles"></div>
+        <div class="discord-wrapper">
+            <a href="https://dsc.gg/betterstar" target="_blank" class="discord-button">
+                <div class="pulse"></div>
+                <i class="fab fa-discord discord-icon"></i>
+            </a>
+            <p class="contact-text">Entre em nossa comunidade no Discord!</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 RSeeker Scripts. Todos os direitos reservados.</p>
+        <p>&copy; Mscripts 2024-2025. Todos os direitos reservados.</p>
     </footer>
 
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 4px and 8px
+                const size = 4 + Math.random() * 4;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration and delay
+                const duration = 6 + Math.random() * 4;
+                const delay = -Math.random() * 20;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize particles
+        createParticles();
+    </script>
 </body>
-
 </html>
-
