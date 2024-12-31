@@ -94,6 +94,9 @@
             font-size: 1.1rem;
             text-align: center;
             transition: all 0.3s ease;
+            word-wrap: break-word; /* Quebra palavras longas */
+            overflow-wrap: break-word; /* Suporte para navegadores modernos */
+            overflow: hidden; /* Previne que o texto transborde */
         }
 
         .content-box:hover {
