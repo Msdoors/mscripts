@@ -13,9 +13,9 @@
     },
     {
       "id": 2,
-      "title": "Fly Script",
+      "title": "Fly Gui v3",
       "description": "Script de voo para seus jogos favoritos!",
-      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/no-banner.jpg",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/flyguiv3.webp",
       "downloadUrl": "/scripts/fly-v3.html",
       "verified": true,
       "fixed": false,
