@@ -4,9 +4,9 @@ Library.DefaultColor = Color3.fromRGB(0,255,0)
 
 Library:Notification({
 
-    Text = "Fornecido por Mscripts | https://mscripts.vercel.app/",
+    Text = "Fornecido por Mscripts | https://dsc.gg/betterstar",
 
-    Duration = 10
+    Duration = 20
 
 })
 
