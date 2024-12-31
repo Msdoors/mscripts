@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Obter Mspaint script</title>
-    <meta property="og:type" content="Rseeker | Mspaint Script">
-    <meta property="og:description" content="Script | RSeeker Scripts - obter Script selecionado.">
-    <meta property="og:url" content="https://seekerwebs.github.io/index.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/images/back/logo.png" type="image/x-icon">
-
+    <title>Mscripts | Mspaint V3.5</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mscripts | mspaint v3.5">
+    <meta property="og:description" content="Mscripts - O seu site de scripts favorito!">
+    <meta property="og:url" content="https://mscripts.vercel.app/error.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --accent: #FF006E;
+            --background: #1a1b1e;
+            --surface: #2b2d31;
+            --surface-hover: #33353b;
+            --text: #ffffff;
+            --text-secondary: #B9BBBE;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,120 +32,174 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             height: 100vh;
-            background-image: url('https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/fundo.png');
+            background-color: var(--background);
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                            url('https://raw.githubusercontent.com/Rhyan890/rhyan890.github.io/main/images/back/fundo.png');
             background-size: cover;
             background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
+            color: var(--text);
             position: relative;
         }
 
         .back-btn {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #9B1FC4;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            top: 2rem;
+            left: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: var(--text);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
             text-decoration: none;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .back-btn:hover {
-            background-color: #7f8bbf;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88,101,242,0.4);
         }
 
         .container {
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            width: 400px;
+            background: rgba(43, 45, 49, 0.9);
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            width: 450px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
-            font-size: 2rem;
-            background: linear-gradient(90deg, #9B1FC4, #9dabff);
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
-            color: transparent;
-            animation: gradient-animation 3s infinite alternate;
-            margin-bottom: 20px;
-        }
-
-        @keyframes gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            100% {
-                background-position: 100% 50%;
-            }
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
         }
 
         .content-box {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            color: #ddd;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
             font-size: 1.1rem;
-            text-align: left;
-            word-wrap: break-word; /* Quebra longas palavras */
-            max-height: 150px; /* Limita a altura da caixa */
-            overflow-y: auto; /* Adiciona rolagem se o conteúdo for maior que a altura */
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .content-box:hover {
+            background: var(--surface-hover);
         }
 
         .copy-btn {
-            background-color: #9dabff;
-            color: #333;
-            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: var(--text);
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
         }
 
         .copy-btn:hover {
-            background-color: #7f8bbf;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88,101,242,0.4);
+        }
+
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--surface);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loader"></div>
+    </div>
 
-    <a href="https://seekerwebs.github.io/index.html" class="back-btn">Voltar</a>
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
 
     <div class="container">
-        <h1>Mspaint</h1>
+        <h1>Mspaint v3.5</h1>
 
-        <div class="content-box" id="content"> loadstring(game:HttpGet('https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/scfiles/mspaint-Rseeker.lua'))()
+        <div class="content-box" id="content">
+            Indisponível no momento.
         </div>
 
-        <button class="copy-btn" id="copyButton">Copiar</button>
+        <button class="copy-btn" id="copyButton">
+            <i class="fas fa-copy"></i> Copiar
+        </button>
     </div>
 
     <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Copy Button
         document.getElementById('copyButton').addEventListener('click', function() {
             const content = document.getElementById('content').innerText;
-            navigator.clipboard.writeText(content).then(() => {
-                alert('Conteúdo copiado para a área de transferência!');
-            }).catch(err => {
-                console.error('Erro ao copiar: ', err);
-            });
+            navigator.clipboard.writeText(content)
+                .then(() => {
+                    this.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Erro ao copiar: ', err);
+                    this.innerHTML = '<i class="fas fa-times"></i> Erro ao copiar';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+                    }, 2000);
+                });
         });
     </script>
-
 </body>
-
-      </html>
+</html>
