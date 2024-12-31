@@ -82,7 +82,7 @@
       "title": "HitBox Expander",
       "description": "Expanda a hitbox de seus inimigos e divirta-se!",
       "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/hitbox-expander.webp",
-      "downloadUrl": "scripts/hitbox-expanderhtml",
+      "downloadUrl": "scripts/hitbox-expander.html",
       "verified": true,
       "fixed": false,
       "author": "Rhyan57",
