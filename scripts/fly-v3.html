@@ -202,40 +202,4 @@
         });
     </script>
 </body>
-</html>            transition: background-color 0.3s ease;
-            text-decoration: none;
-        }
-
-        .copy-btn:hover {
-            background-color: #7f8bbf;
-        }
-    </style>
-</head>
-
-<body>
-
-    <a href="https://seekerwebs.github.io/index.html" class="back-btn">Voltar</a>
-
-    <div class="container">
-        <h1>Fly</h1>
-
-        <div class="content-box" id="content"> loadstring(game:HttpGet('https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/main/scfiles/fly-Rseeker.lua'))()
-        </div>
-
-        <button class="copy-btn" id="copyButton">Copiar</button>
-    </div>
-
-    <script>
-        document.getElementById('copyButton').addEventListener('click', function() {
-            const content = document.getElementById('content').innerText;
-            navigator.clipboard.writeText(content).then(() => {
-                alert('Conteúdo copiado para a área de transferência!');
-            }).catch(err => {
-                console.error('Erro ao copiar: ', err);
-            });
-        });
-    </script>
-
-</body>
-
-</html>
+</html>            
