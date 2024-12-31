@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mscripts | Upload de Scripts</title>
+    <meta property="og:description" content="Mscripts | Envie seu script!">
+    <meta property="og:url" content="https://mscripts.vercel.app/upload.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --accent: #FF006E;
+            --background: #1a1b1e;
+            --surface: #2b2d31;
+            --surface-hover: #33353b;
+            --text: #ffffff;
+            --text-secondary: #B9BBBE;
+            --discord: #5865F2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--surface);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: rgba(43, 45, 49, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--discord);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .upload-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+            z-index: 2;
+        }
+
+        .upload-card {
+            background: rgba(43, 45, 49, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .upload-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .upload-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .discord-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--discord);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .discord-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+        }
+
+        .discord-icon {
+            font-size: 1.5rem;
+        }
+
+        footer {
+            background: rgba(43, 45, 49, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            text-align: center;
+            z-index: 100;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .upload-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .upload-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <div class="header-container">
+            <h1 class="logo">Mscripts</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="scripts.html">Scripts</a></li>
+                    <li><a href="aboutme.html">Sobre Nós</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="particles" class="particles"></div>
+
+    <main class="upload-container">
+        <div class="upload-card">
+            <h1 class="upload-title">Envie Seu Script</h1>
+            <p class="upload-description">
+                Para enviar seu script para o Mscripts, entre em nosso servidor Discord. 
+                Lá você encontrará um canal específico para uploads de scripts, onde nossa equipe irá revisar e adicionar seu script ao site.
+                <br><br>
+                Certifique-se de que seu script:
+                <br><br>
+                • Está funcionando corretamente<br>
+                • Não contém conteúdo malicioso<br>
+                • Inclui uma descrição clara<br>
+                • Tem uma preview/demonstração
+            </p>
+            <a href="https://dsc.gg/betterstar" target="_blank" class="discord-button">
+                <i class="fab fa-discord discord-icon"></i>
+                Entrar no Discord
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Mscripts 2024-2025. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = 4 + Math.random() * 4;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                const duration = 6 + Math.random() * 4;
+                const delay = -Math.random() * 20;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+
+                container.appendChild(particle);
+            }
+        }
+
+        createParticles();
+    </script>
+</body>
+</html>
