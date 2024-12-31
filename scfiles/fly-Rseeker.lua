@@ -1,5 +1,6 @@
--- Discord Banner
-loadstring(game:HttpGet('https://raw.githubusercontent.com/SeekerWebS/seekerwebs.github.io/rbsSource/scs-game/dc-seeker.lua'))()
+--[[
+destruído por: https://mscripts.vercel.app/
+]]--
 --[[ 
 ----------------------------------
 Nome: fly
