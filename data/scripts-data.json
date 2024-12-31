@@ -43,6 +43,17 @@
       "fixed": false,
       "author": "Rhyan57",
       "authorId": "896604349311115304"
+    },
+    {
+      "id": 5,
+      "title": "Dex",
+      "description": "Veja os arquivos dos jogos de forma simples!",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/dex.webp",
+      "downloadUrl": "/scripts/dex.html",
+      "verified": true,
+      "fixed": false,
+      "author": "Rhyan57",
+      "authorId": "896604349311115304"
     }
   ]
 }
