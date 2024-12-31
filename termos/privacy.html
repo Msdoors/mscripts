@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Termos de Uso e Política de Privacidade - RSeeker Scripts</title>
+    <title>Mscripts | Política de Privacidade e Termos de Uso</title>
+    <meta property="og:description" content="Mscripts | Política de Privacidade e Termos de Uso">
+    <meta property="og:url" content="https://mscripts.vercel.app/privacy.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Reset básico */
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --accent: #FF006E;
+            --background: #1a1b1e;
+            --surface: #2b2d31;
+            --surface-hover: #33353b;
+            --text: #ffffff;
+            --text-secondary: #B9BBBE;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,115 +29,276 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #101415;
-            color: white;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
             line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-            padding: 20px;
+            overflow-x: hidden;
         }
 
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--surface);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loadingScreen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Header */
         header {
-            background: linear-gradient(90deg, #9B1FC4, #7300FF);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
+            background: var(--surface);
+            padding: 1.5rem;
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
-            color: #9B1FC4;
-            margin-bottom: 10px;
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        section {
-            margin: 20px 0;
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        a {
-            color: #9B1FC4;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            background-color: #101415;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        footer ul {
+        nav ul {
+            display: flex;
+            gap: 2rem;
             list-style: none;
         }
 
-        footer ul li {
-            margin: 10px 0;
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
-        footer ul li a {
-            color: white;
+        nav a:hover {
+            color: var(--text);
+            background: var(--surface-hover);
         }
 
-        footer ul li a:hover {
-            text-decoration: underline;
+        /* Main Content */
+        .content-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--background);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .content-section h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .content-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .content-section ul {
+            list-style-position: inside;
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            padding-left: 1rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
-
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loader"></div>
+    </div>
 
+    <!-- Header -->
     <header>
-        <h1>Termos de Uso e Política de Privacidade</h1>
+        <div class="header-container">
+            <h1 class="logo">Mscripts</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="scripts.html">Scripts</a></li>
+                    <li><a href="destaques.html">Destaques</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <section>
-        <h2>Termos de Uso</h2>
-        <p>Bem-vindo ao RSeeker Scripts. Ao acessar e utilizar nosso site, você concorda em cumprir os seguintes termos e condições:</p>
-        <ul>
-            <li><strong>Uso Permitido:</strong> Os scripts disponíveis neste site são fornecidos para uso pessoal e não comercial. Qualquer redistribuição ou reprodução do conteúdo, no todo ou em parte, é proibida sem o consentimento expresso do site.</li>
-            <li><strong>Responsabilidade:</strong> O uso de scripts é por sua conta e risco. Nós não nos responsabilizamos por quaisquer danos causados pelo uso de scripts.</li>
-            <li><strong>Modificações:</strong> Reservamo-nos o direito de modificar estes termos a qualquer momento, sem aviso prévio. Verifique esta página regularmente para se manter atualizado.</li>
-        </ul>
-    </section>
+    <!-- Main Content -->
+    <main>
+        <div class="content-container">
+            <h1 class="section-title">Política de Privacidade e Termos de Uso</h1>
 
-    <section>
-        <h2>Política de Privacidade</h2>
-        <p>No RSeeker Scripts, respeitamos sua privacidade e estamos comprometidos em proteger qualquer informação pessoal que você nos forneça.</p>
-        <ul>
-            <li><strong>Coleta de Informações:</strong> Podemos coletar informações pessoais, como nome e endereço de e-mail, quando você interage conosco, como ao enviar feedback ou se inscrever em newsletters.</li>
-            <li><strong>Uso de Informações:</strong> As informações coletadas são usadas exclusivamente para melhorar nossos serviços, responder às suas solicitações e enviar comunicações sobre atualizações e novidades do site.</li>
-            <li><strong>Compartilhamento de Informações:</strong> Nós não vendemos, trocamos ou transferimos suas informações pessoais para terceiros, exceto quando necessário para cumprir a lei.</li>
-            <li><strong>Cookies:</strong> Nosso site pode usar cookies para melhorar sua experiência. Você pode optar por desativar os cookies através das configurações do seu navegador.</li>
-        </ul>
-    </section>
+            <div class="content-section">
+                <h2>1. Política de Privacidade</h2>
+                <p>Ao utilizar o Mscripts, você concorda com nossa política de coleta e uso de informações. Proteger sua privacidade é uma prioridade para nós.</p>
+                
+                <h3>1.1 Informações Coletadas</h3>
+                <p>Coletamos apenas as informações necessárias para melhorar sua experiência:</p>
+                <ul>
+                    <li>Dados de uso do site</li>
+                    <li>Preferências de scripts</li>
+                    <li>Informações técnicas do dispositivo</li>
+                </ul>
+            </div>
 
-    <section>
-        <h2>Alterações à Política de Privacidade</h2>
-        <p>Reservamo-nos o direito de modificar esta Política de Privacidade a qualquer momento. Todas as alterações serão publicadas nesta página, e encorajamos você a revisá-la regularmente para estar sempre informado sobre nossas práticas.</p>
-    </section>
+            <div class="content-section">
+                <h2>2. Termos de Uso</h2>
+                <p>Ao acessar o Mscripts, você concorda em cumprir estes termos de serviço e todas as leis e regulamentações aplicáveis.</p>
+                
+                <h3>2.1 Uso Responsável</h3>
+                <ul>
+                    <li>Os scripts são fornecidos apenas para fins educacionais e de entretenimento</li>
+                    <li>É proibido o uso dos scripts para fins maliciosos ou ilegais</li>
+                    <li>Não nos responsabilizamos pelo uso indevido dos scripts</li>
+                </ul>
+            </div>
 
-    <section>
-        <h2>Contato</h2>
-        <p>Se você tiver dúvidas sobre estes Termos de Uso ou nossa Política de Privacidade, entre em contato conosco através do e-mail: <a href="mailto:https://dsc.gg/betterstar">https://dsc.gg/betterstar</a>.</p>
-    </section>
+            <div class="content-section">
+                <h2>3. Direitos e Responsabilidades</h2>
+                <p>O Mscripts reserva-se o direito de:</p>
+                <ul>
+                    <li>Modificar ou descontinuar qualquer aspecto do serviço</li>
+                    <li>Remover conteúdo inadequado ou que viole nossos termos</li>
+                    <li>Atualizar estes termos conforme necessário</li>
+                </ul>
+            </div>
 
+            <div class="content-section">
+                <h2>4. Segurança</h2>
+                <p>Nos comprometemos a:</p>
+                <ul>
+                    <li>Proteger suas informações pessoais</li>
+                    <li>Manter a segurança do site</li>
+                    <li>Atualizar regularmente nossas medidas de segurança</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
     <footer>
-        <ul>
-            <li><a href="https://seekerwebs.github.io/index.html">Início</a></li>
-            <li><a href="https://seekerwebs.github.io/seekerSc.html">Scripts</a></li>
-            <li><a href="https://seekerwebs.github.io/aboutme.html">Sobre Nós</a></li>
-            <li><a href="https://seekerwebs.github.io/contato.html">Contato</a></li>
-        </ul>
-        <p>&copy; 2024 RSeeker Scripts. Todos os direitos reservados.</p>
+        <p>&copy; Mscripts 2024-2025. Todos os direitos reservados.</p>
     </footer>
 
+    <script>
+        // Loading Screen Animation
+        window.onload = function() {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => loadingScreen.style.display = 'none', 500);
+            }, 1500);
+        };
+    </script>
 </body>
-
 </html>
