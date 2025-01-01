@@ -1,0 +1,14 @@
+{
+  "games": {
+    "6516141723": {
+      "name": "Doors Lobby",
+      "script_path": "/scripts/doors/lobby.lua",
+      "supported_versions": ["1.0", "1.1"]
+    },
+    "6839171747": {
+      "name": "Doors",
+      "script_path": "/scripts/doors/main.lua",
+      "supported_versions": ["2.0"]
+    }
+  }
+}
