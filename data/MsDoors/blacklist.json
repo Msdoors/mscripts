@@ -1,0 +1,16 @@
+{
+  "blacklisted_users": {
+    "user_ids": {
+      "123456789": {
+        "reason": "Violação de termos",
+        "date": "2024-01-01"
+      }
+    },
+    "usernames": {
+      "Player123": {
+        "reason": "Spam",
+        "date": "2024-01-01"
+      }
+    }
+  }
+}
