@@ -90,10 +90,37 @@
     },
     {
       "id": 9,
-      "title": "Invisible Script",
-      "description": "Fique invisível de forma simples",
-      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/invisible-script.webp",
-      "downloadUrl": "scripts/invisíble-script.html",
+      "title": "YARHM",
+      "description": "FREE - OPENSOURCE - KEYLESS
+YARHM
+yet another random hub menu
+
+Join the discord for announcements!
+(To avoid confusion, the discord link is only available in the menu.)
+
+A new exploit hub, with an easy-to-use UI, mobile-friendly, and free.
+
+Features:
+- Modules
+The different sub-menus in YARHM is called modules. They make creating exploits for other games super easy.
+
+- Minimal detection
+Official YARHM modules is often not detected, both game-wise and player-wise. So you won't get banned, while keeping your huge ego.
+
+- Customizable
+Because of YARHM's opensource nature, you can make your own YARHM module. It's as simple as making your own YARHM Module in a Lua file, host it somewhere (like GitHub) and add your custom module in YARHM.
+
+
+Supported games:
+- Flee the Facility, featuring ESP like PC, Players, Beast, etc.
+- Murder Mystery 2, featuring ESP like Players (Murderer and Sheriff shown separately), and dropped gun showing you where a gun is dropped at. Also lets you automatically make a shot towards the murderer if you have the gun, and more.
+
+And more to come!
+
+YARHM is still very very new. Bugs are expected. If you know a bit of Luau, come and take a look over the repo! :)
+https://github.com/Joystickplays/psychic-octo-invention",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/6877871-1713028628346.webp",
+      "downloadUrl": "scripts/yarhm.html",
       "verified": true,
       "fixed": false,
       "author": "Rhyan57",
