@@ -123,9 +123,9 @@
     },
     {
       "id": 12,
-      "title": "FAKE VERIFIED [ V.2 ]",
+      "title": "FAKE VERIFIED",
       "description": "Tenha um Fake verificado!",
-      "image": "",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/4343641-1739656157626.png",
       "downloadUrl": "scripts/fake-verify.html",
       "verified": true,
       "fixed": false,
