@@ -120,6 +120,17 @@
       "fixed": false,
       "author": "Rfonte",
       "authorId": "744686114555559996"
+    },
+    {
+      "id": 12,
+      "title": "FAKE VERIFIED [ V.2 ]",
+      "description": "Tenha um Fake verificado!",
+      "image": "",
+      "downloadUrl": "scripts/fake-verify.html",
+      "verified": true,
+      "fixed": false,
+      "author": "Rhya57",
+      "authorId": "896604349311115304"
     }
   ]
 }
