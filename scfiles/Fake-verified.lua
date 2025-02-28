@@ -1,20 +1,13 @@
--- Sistema de gerenciamento de IDs temporários
 local tempImageIDs = {}
 local nextTempID = 1
-
--- Função para obter um ID temporário para uma imagem
 local function GetTempImageID()
     local tempID = "rbxassetid://ms-" .. string.format("%08d", nextTempID)
     nextTempID = nextTempID + 1
     return tempID
 end
-
--- Função para registrar uma imagem com um ID temporário
 local function RegisterTempImage(tempID, imageAsset)
     tempImageIDs[tempID] = imageAsset
 end
-
--- Função atualizada para obter a imagem do GitHub
 local function GetGitImageID(githubLink, imageName)
     local fileName = "customObject_Image_" .. tostring(imageName) .. ".png"
     
@@ -25,21 +18,14 @@ local function GetGitImageID(githubLink, imageName)
     if not success then
         warn("Falha ao baixar a imagem: " .. githubLink)
         return nil
-    end
-    
+    end    
     writefile(fileName, imageData)
-    
-    -- Criar o asset local
     local imageAsset = (getcustomasset or getsynasset)(fileName)
-    
-    -- Criar e registrar um ID temporário
     local tempID = GetTempImageID()
     RegisterTempImage(tempID, imageAsset)
     
     return tempID
 end
-
--- Função para resolver um ID de imagem (normal ou temporário)
 local function ResolveImageID(imageID)
     if typeof(imageID) == "string" and string.match(imageID, "^rbxassetid://ms%-") then
         return tempImageIDs[imageID] or imageID
@@ -47,8 +33,6 @@ local function ResolveImageID(imageID)
         return imageID
     end
 end
-
--- Substituir a função SetImage das instâncias que usam imagens
 local oldSetImage = {}
 
 local imageClasses = {
@@ -60,11 +44,8 @@ local imageClasses = {
     "BillboardGui",
     "ParticleEmitter"
 }
-
--- Modificar o método Image/Texture/etc para cada classe relevante
 for _, className in ipairs(imageClasses) do
     local success, propertyName = pcall(function()
-        -- Determinar a propriedade de imagem para cada classe
         if className == "ParticleEmitter" then
             return "Texture"
         elseif className == "Decal" or className == "Texture" then
@@ -78,11 +59,7 @@ for _, className in ipairs(imageClasses) do
         local metatable = getrawmetatable(Instance.new(className))
         local oldIndex = metatable.__index
         local oldNewIndex = metatable.__newindex
-        
-        -- Armazenar o método original
         oldSetImage[className] = oldNewIndex
-        
-        -- Substituir o método __newindex
         metatable.__newindex = function(self, property, value)
             if property == propertyName and typeof(self) == "Instance" and self.ClassName == className then
                 local resolvedValue = ResolveImageID(value)
@@ -99,7 +76,7 @@ local function CreateGitImage(githubLink, imageName, parent)
     
     if imageId then
         local image = Instance.new("ImageLabel")
-        image.Image = imageId -- Aqui já vai usar o ID temporário
+        image.Image = imageId
         image.Size = UDim2.new(0, 300, 0, 300)
         image.Parent = parent or workspace
         
