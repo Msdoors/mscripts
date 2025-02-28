@@ -137,7 +137,7 @@ TextButton_2.TextScaled = true
 TextButton_2.TextSize = 14.000
 TextButton_2.TextWrapped = true
 
-message.Name = "message"
+message.Name = "Mensagem"
 message.Parent = Frame
 message.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 message.BorderColor3 = Color3.fromRGB(0, 0, 0)
