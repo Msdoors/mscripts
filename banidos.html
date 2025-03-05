@@ -3,52 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rhyan | Próximos banidos.</title>
-    <meta property="og:description" content="Mscripts | Serão banidos by rhyan">
-    <meta property="og:url" content="https://mscripts.vercel.app/banidos.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/ms-scripts-logo.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Discord | Bate Papo</title>
     <style>
+        :root {
+            --discord-bg: #36393f;
+            --discord-light-bg: #2f3136;
+            --discord-darker-bg: #202225;
+            --discord-channel-bg: #2f3136;
+            --discord-text: #dcddde;
+            --discord-muted: #72767d;
+            --discord-link: #00b0f4;
+            --discord-highlight: #4f545c;
+            --discord-separator: rgba(79, 84, 92, 0.48);
+            --discord-online: #43b581;
+            --discord-brand: #5865F2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        @font-face {
+            font-family: 'Whitney';
+            src: url('https://cdn.jsdelivr.net/gh/maazullah96/DiscordFonts@main/Whitney/Whitney-Book.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Whitney';
+            src: url('https://cdn.jsdelivr.net/gh/maazullah96/DiscordFonts@main/Whitney/Whitney-Medium.woff2') format('woff2');
+            font-weight: bold;
+            font-style: normal;
+        }
+
         body {
-            background-color: #36393f;
+            background-color: var(--discord-bg);
+            color: var(--discord-text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .discord-app {
+            display: flex;
+            height: 100vh;
+        }
+
+        .server-sidebar {
+            width: 72px;
+            background-color: var(--discord-darker-bg);
+            padding: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .server-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--discord-brand);
+            border-radius: 50%;
+            margin-bottom: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .server-icon.active {
+            border-radius: 16px;
+        }
+
+        .channel-sidebar {
+            width: 240px;
+            background-color: var(--discord-light-bg);
+            display: flex;
             flex-direction: column;
         }
-        .loader {
-            border: 4px solid #5865F2;
-            border-top: 4px solid white;
+
+        .server-header {
+            height: 48px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--discord-separator);
+            font-weight: bold;
+        }
+
+        .channel-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .channel-category {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--discord-muted);
+            padding: 16px 8px 4px 16px;
+        }
+
+        .channel-item {
+            padding: 6px 8px 6px 16px;
+            margin: 2px 0;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--discord-muted);
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .channel-item.active {
+            background-color: rgba(79, 84, 92, 0.32);
+            color: var(--discord-text);
+        }
+
+        .channel-item:hover:not(.active) {
+            background-color: rgba(79, 84, 92, 0.16);
+            color: var(--discord-text);
+        }
+
+        .channel-icon {
+            margin-right: 6px;
+        }
+
+        .user-area {
+            height: 52px;
+            background-color: rgba(32, 34, 37, 0.5);
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-right: 8px;
+            position: relative;
+            background-color: var(--discord-brand);
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .user-avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background-color: var(--discord-online);
+            border-radius: 50%;
+            border: 2px solid var(--discord-light-bg);
         }
-        .message {
-            font-size: 18px;
-            opacity: 0.7;
+
+        .user-info {
+            flex: 1;
+        }
+
+        .username {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .user-tag {
+            font-size: 12px;
+            color: var(--discord-muted);
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--discord-bg);
+        }
+
+        .chat-header {
+            height: 48px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--discord-separator);
+        }
+
+        .channel-name {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .channel-hash {
+            margin-right: 8px;
+            color: var(--discord-muted);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 0 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse; /* For scroll to bottom */
+        }
+
+        .message-group {
+            margin: 16px 0;
+            display: flex;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 16px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .message-author {
+            font-weight: bold;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .message-timestamp {
+            font-size: 12px;
+            color: var(--discord-muted);
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.375;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--discord-text);
+        }
+
+        .message-attachment {
+            margin-top: 8px;
+            max-width: 520px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .message-attachment img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .message-input-container {
+            padding: 0 16px 24px;
+        }
+
+        .message-input {
+            background-color: rgba(64, 68, 75, 1);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--discord-text);
+            font-size: 15px;
+            border: none;
+            outline: none;
+            width: 100%;
+            resize: none;
+            height: 44px;
+        }
+
+        .message-input::placeholder {
+            color: var(--discord-muted);
+        }
+
+        /* Modal for message info */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--discord-light-bg);
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            padding: 16px;
+            color: var(--discord-text);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--discord-separator);
+            padding-bottom: 8px;
+        }
+
+        .modal-info {
+            margin-bottom: 16px;
+        }
+
+        .modal-info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .modal-info-label {
+            font-weight: bold;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .modal-info-value {
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .modal-close {
+            text-align: right;
+        }
+
+        .modal-close-btn {
+            background-color: var(--discord-brand);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .server-sidebar, .channel-sidebar {
+                display: none;
+            }
+
+            .mobile-nav {
+                display: flex;
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+        }
+
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--discord-text);
+            font-size: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Mobile sidebar */
+        .mobile-sidebar {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            z-index: 200;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-sidebar.active {
+            display: flex;
+        }
+
+        .mobile-sidebar-backdrop {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 199;
+            display: none;
+        }
+
+        .mobile-sidebar-backdrop.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="loader"></div>
-    <div class="message">Carregando lista e ids que serão banidos...</div>
+    <div class="discord-app">
+        <!-- Server sidebar -->
+        <div class="server-sidebar">
+            <div class="server-icon active">C</div>
+            <div class="server-icon">+</div>
+        </div>
+
+        <!-- Channel sidebar -->
+        <div class="channel-sidebar">
+            <div class="server-header">Chat de Banidos</div>
+            <div class="channel-list">
+                <div class="channel-category">Canais de texto</div>
+                <div class="channel-item">
+                    <span class="channel-icon">#</span>
+                    <span>bem-vindo</span>
+                </div>
+                <div class="channel-item">
+                    <span class="channel-icon">#</span>
+                    <span>regras</span>
+                </div>
+                <div class="channel-item active">
+                    <span class="channel-icon">#</span>
+                    <span>geral</span>
+                </div>
+                <div class="channel-item">
+                    <span class="channel-icon">#</span>
+                    <span>memes</span>
+                </div>
+            </div>
+            <div class="user-area">
+                <div class="user-avatar"></div>
+                <div class="user-info">
+                    <div class="username">Usuário</div>
+                    <div class="user-tag">#0000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <button class="mobile-menu-btn">☰</button>
+                <div class="channel-name">
+                    <span class="channel-hash">#</span>
+                    <span>geral</span>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be loaded here by JavaScript -->
+            </div>
+            <div class="message-input-container">
+                <textarea class="message-input" placeholder="Conversar em #geral"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sidebar backdrop -->
+    <div class="mobile-sidebar-backdrop"></div>
+
+    <!-- Mobile sidebar -->
+    <div class="mobile-sidebar">
+        <!-- Content will be cloned from desktop sidebar by JavaScript -->
+    </div>
+
+    <!-- Message info modal -->
+    <div class="modal" id="message-modal">
+        <div class="modal-content">
+            <div class="modal-header">Informações da Mensagem</div>
+            <div class="modal-info">
+                <div class="modal-info-row">
+                    <div class="modal-info-label">ID:</div>
+                    <div class="modal-info-value" id="modal-message-id"></div>
+                </div>
+                <div class="modal-info-row">
+                    <div class="modal-info-label">Link:</div>
+                    <div class="modal-info-value" id="modal-message-link"></div>
+                </div>
+            </div>
+            <div class="modal-close">
+                <button class="modal-close-btn" id="modal-close">Fechar</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Redireciona automaticamente para o Discord
-        // Sxhelzy descobriu que tinha Grabyfy, então tive que tirar 🙄
-        window.location.href = 'https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/banidos2.html';
+        // Discord chat data in JSON format
+        const chatData = {
+            "messages": [
+                {
+                    "id": "1346954123031085138",
+                    "username": "sukuna201.",
+                    "content": "@rhyan",
+                    "timestamp": "2025-03-05T18:14:28",
+                    "avatar_id": "1301198850979008602",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346954123031085138",
+                    "attachments": [
+                        {
+                            "type": "image",
+                            "url": "https://media.discordapp.net/attachments/1219820509999398995/1346954122728968202/Screenshot_2025-03-05-14-31-28-313_com.google.android.googlequicksearchbox.jpg?ex=67ca1048&is=67c8bec8&hm=abb3fcb2b6f3643d49b3919b1763d8b9f30d6660f8201805cd9c1660f9293ae8&"
+                        }
+                    ]
+                },
+                {
+                    "id": "1346953938066346148",
+                    "username": "kkdani",
+                    "content": "Eu podendo recuperar minha conta a qualquer momento",
+                    "timestamp": "2025-03-05T18:14:45",
+                    "avatar_id": "1346623716305670296",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346953938066346148",
+                    "attachments": []
+                },
+                {
+                    "id": "1346915067098038353",
+                    "username": "KkDani",
+                    "content": "O cara defendendo criança irmao",
+                    "timestamp": "2025-03-05T14:15:21",
+                    "avatar_id": "1346623716305670296",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346915067098038353",
+                    "attachments": []
+                },
+                {
+                    "id": "1346914788076158986",
+                    "username": "KkDani",
+                    "content": "Xo ir xingar na dm dele so pra rir",
+                    "timestamp": "2025-03-05T15:38:14",
+                    "avatar_id": "1346623716305670296",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346914788076158986",
+                    "attachments": []
+                },
+                {
+                    "id": "1346907840400326686",
+                    "username": "PreCeptor",
+                    "content": "deve ter sido: \"ain, zyrox denunciou, significa que sou obrigado a banir\"",
+                    "timestamp": "2025-03-05T15:10:52",
+                    "avatar_id": "1187883485923389532",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346907840400326686",
+                    "attachments": []
+                },
+                {
+                    "id": "1346907378997530624",
+                    "username": "DreamAlt",
+                    "content": "ele script é só um dos sinais que ele é infantil",
+                    "timestamp": "2025-03-05T15:09:30",
+                    "avatar_id": "1021877557504778390",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346907378997530624",
+                    "attachments": []
+                },
+                {
+                    "id": "1346907216506126438",
+                    "username": "André",
+                    "content": "mds ele foi banido por que ele tava desrespeitando a administração desse servidor não por causa de script",
+                    "timestamp": "2025-03-05T15:58:18",
+                    "avatar_id": "1345941876192051350",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346907216506126438",
+                    "attachments": []
+                },
+                {
+                    "id": "1346903863957131357",
+                    "username": "André",
+                    "content": "minha conta foi banida, agora vou banir a de geral pra me vingar e me achar o máximo, hahahahaha",
+                    "timestamp": "2025-03-05T14:55:41",
+                    "avatar_id": "1345941876192051350",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346903863957131357",
+                    "attachments": []
+                },
+                {
+                    "id": "1346904212281495574",
+                    "username": "DreamAlt",
+                    "content": "Rhyan sempre foi o vilão",
+                    "timestamp": "2025-03-05T14:56:59",
+                    "avatar_id": "1021877557504778390",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346904212281495574",
+                    "attachments": []
+                },
+                {
+                    "id": "1346904792332763196",
+                    "username": "SunAppend",
+                    "content": "tanto faz oque esse merdinha esteja pensando ou não em fazer, de qualquer jeito um ban que eu posso mt bem revogar ou até mesmo criar outra conta não vai mudar nada na minha vida, já ele sempre vai viver com essa angústia, esse bosta",
+                    "timestamp": "2025-03-05T14:58:40",
+                    "avatar_id": "774634548054065153",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346904792332763196",
+                    "attachments": []
+                },
+                {
+                    "id": "1346904260666982451",
+                    "username": "Sunappend",
+                    "content": "Rhyan sempre foi carente de atenção",
+                    "timestamp": "2025-03-05T14:56:15",
+                    "avatar_id": "774634548054065153",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346904260666982451",
+                    "attachments": []
+                },
+                {
+                    "id": "1346904435003097218",
+                    "username": "SunAppend",
+                    "content": "cara é tão nojento que ameaçou até a tifi",
+                    "timestamp": "2025-03-05T14:57:56",
+                    "avatar_id": "774634548054065153",
+                    "link": "https://discord.com/channels/1057235351556587610/1219820509999398995/1346904435003097218",
+                    "attachments": []
+                },
+                {
+                    "id": "unknown1",
+                    "username": "UserName Desconhecido",
+                    "content": "andré ta com teu nome na boca q nem piroca",
+                    "timestamp": "2025-03-05T13:40:00",
+                    "avatar_id": "unknown",
+                    "link": "",
+                    "attachments": []
+                },
+                {
+                    "id": "unknown2",
+                    "username": "UserName Desconhecido",
+                    "content": "de um lado, andré com foto de blue lock rivals se achando o pika seca",
+                    "timestamp": "2025-03-05T13:41:00",
+                    "avatar_id": "unknown",
+                    "link": "",
+                    "attachments": []
+                }
+            ]
+        };
+
+        // Function to convert timestamp to readable format
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Function to get Discord avatar URL
+        function getDiscordAvatarUrl(avatarId, username) {
+            if (avatarId === "unknown") {
+                // Return a default avatar if avatar_id is unknown
+                return `https://cdn.discordapp.com/embed/avatars/${username.charCodeAt(0) % 5}.png`;
+            }
+            return `https://cdn.discordapp.com/avatars/${avatarId}/${avatarId}.png`;
+        }
+
+        // Function to render messages
+        function renderMessages() {
+            const chatMessagesElement = document.getElementById('chat-messages');
+            chatMessagesElement.innerHTML = '';
+
+            // Group messages by date for headers
+            let currentDate = '';
+
+            // Sort messages by timestamp in reverse order
+            const sortedMessages = [...chatData.messages].sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+
+            sortedMessages.forEach((message, index) => {
+                // Check if we need to show a date divider
+                const messageDate = new Date(message.timestamp).toLocaleDateString('pt-BR');
+                if (messageDate !== currentDate) {
+                    currentDate = messageDate;
+                    const dateDivider = document.createElement('div');
+                    dateDivider.className = 'date-divider';
+                    dateDivider.style.textAlign = 'center';
+                    dateDivider.style.margin = '20px 0';
+                    dateDivider.style.color = 'var(--discord-muted)';
+                    dateDivider.style.fontSize = '12px';
+                    dateDivider.style.position = 'relative';
+                    dateDivider.innerHTML = `
+                        <span style="background-color: var(--discord-bg); padding: 0 10px; position: relative; z-index: 1;">${messageDate}</span>
+                        <div style="border-top: 1px solid var(--discord-separator); position: absolute; top: 50%; width: 100%; z-index: 0;"></div>
+                    `;
+                    chatMessagesElement.appendChild(dateDivider);
+                }
+
+                // Create message group
+                const messageGroup = document.createElement('div');
+                messageGroup.className = 'message-group';
+                messageGroup.setAttribute('data-message-id', message.id);
+                messageGroup.setAttribute('data-message-link', message.link || '');
+
+                // Create avatar
+                const avatarElement = document.createElement('div');
+                avatarElement.className = 'message-avatar';
+                avatarElement.style.backgroundImage = `url(${getDiscordAvatarUrl(message.avatar_id, message.username)})`;
+
+                // Create message content container
+                const contentContainer = document.createElement('div');
+                contentContainer.className = 'message-content';
+
+                // Create message header
+                const headerElement = document.createElement('div');
+                headerElement.className = 'message-header';
+
+                // Create author name
+                const authorElement = document.createElement('div');
+                authorElement.className = 'message-author';
+                authorElement.textContent = message.username;
+
+                // Create timestamp
+                const timestampElement = document.createElement('div');
+                timestampElement.className = 'message-timestamp';
+                timestampElement.textContent = formatTimestamp(message.timestamp);
+
+                // Add header elements
+                headerElement.appendChild(authorElement);
+                headerElement.appendChild(timestampElement);
+                contentContainer.appendChild(headerElement);
+
+                // Create message text
+                const textElement = document.createElement('div');
+                textElement.className = 'message-text';
+                textElement.textContent = message.content;
+                contentContainer.appendChild(textElement);
+
+                // Add attachments if any
+                if (message.attachments && message.attachments.length > 0) {
+                    message.attachments.forEach(attachment => {
+                        if (attachment.type === 'image') {
+                            const attachmentElement = document.createElement('div');
+                            attachmentElement.className = 'message-attachment';
+                            const imgElement = document.createElement('img');
+                            imgElement.src = attachment.url;
+                            imgElement.alt = 'Attachment';
+                            attachmentElement.appendChild(imgElement);
+                            contentContainer.appendChild(attachmentElement);
+                        }
+                    });
+                }
+
+                // Add elements to the message group
+                messageGroup.appendChild(avatarElement);
+                messageGroup.appendChild(contentContainer);
+
+                // Add message group to chat area
+                chatMessagesElement.appendChild(messageGroup);
+
+                // Add click event to show message info
+                messageGroup.addEventListener('click', () => {
+                    showMessageInfo(message.id, message.link);
+                });
+            });
+        }
+
+        // Function to show message info in modal
+        function showMessageInfo(messageId, messageLink) {
+            const modal = document.getElementById('message-modal');
+            const modalMessageId = document.getElementById('modal-message-id');
+            const modalMessageLink = document.getElementById('modal-message-link');
+
+            modalMessageId.textContent = messageId;
+            modalMessageLink.textContent = messageLink || 'Link não disponível';
+
+            modal.style.display = 'flex';
+        }
+
+        // Modal close button functionality
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('message-modal').style.display = 'none';
+        });
+
+        // Mobile menu functionality
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            const mobileSidebar = document.querySelector('.mobile-sidebar');
+            const mobileSidebarBackdrop = document.querySelector('.mobile-sidebar-backdrop');
+            
+            // Clone sidebar content for mobile if it's empty
+            if (!mobileSidebar.children.length) {
+                const serverSidebar = document.querySelector('.server-sidebar').cloneNode(true);
+                const channelSidebar = document.querySelector('.channel-sidebar').cloneNode(true);
+                
+                mobileSidebar.appendChild(serverSidebar);
+                mobileSidebar.appendChild(channelSidebar);
+            }
+            
+            mobileSidebar.classList.add('active');
+            mobileSidebarBackdrop.classList.add('active');
+        });
+
+        // Mobile sidebar backdrop click to close
+        document.querySelector('.mobile-sidebar-backdrop').addEventListener('click', () => {
+            const mobileSidebar = document.querySelector('.mobile-sidebar');
+            const mobileSidebarBackdrop = document.querySelector('.mobile-sidebar-backdrop');
+            
+            mobileSidebar.classList.remove('active');
+            mobileSidebarBackdrop.classList.remove('active');
+        });
+
+        // Message input functionality (just for appearance, not functional)
+        document.querySelector('.message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                alert('Função de enviar mensagens não implementada nesta simulação.');
+            }
+        });
+
+        // Initialize the chat on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMessages();
+        });
     </script>
 </body>
 </html>
