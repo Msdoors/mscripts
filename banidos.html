@@ -535,7 +535,7 @@
                             "url": "https://mscripts.vercel.app/images/back/Screenshot_20250305-153607.png"
                         },
                         {
-                            "type": "image",
+                            "type": "video",
                             "url": "https://mscripts.vercel.app/data/imagens/ssstik.io_@pokemongoeruim_1740761879968.mp4"
                         }
                     ]
@@ -746,7 +746,26 @@
                 textElement.className = 'message-text';
                 textElement.textContent = message.content;
                 contentContainer.appendChild(textElement);
+                
+           // Add attachments if any
+            if (message.attachments && message.attachments.length > 0) {
+            message.attachments.forEach(attachment => {
+            if (attachment.type === 'video') {
+            const attachmentElement = document.createElement('div');
+            attachmentElement.className = 'message-attachment';
 
+            const videoElement = document.createElement('video');
+            videoElement.src = attachment.url;
+            videoElement.controls = true; // Adiciona controles de reprodução
+            videoElement.width = 300; // Ajuste conforme necessário
+            videoElement.alt = 'Video Attachment';
+
+            attachmentElement.appendChild(videoElement);
+            contentContainer.appendChild(attachmentElement);
+                }
+              });
+             }
+                
                 // Add attachments if any
                 if (message.attachments && message.attachments.length > 0) {
                     message.attachments.forEach(attachment => {
