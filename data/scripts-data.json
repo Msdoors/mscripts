@@ -131,6 +131,17 @@
       "fixed": false,
       "author": "Rhya57",
       "authorId": "896604349311115304"
+    },
+    {
+      "id": 13,
+      "title": "Invisible Script[FE]",
+      "description": "Fique invisível em qualquer jogo!",
+      "image": "https://raw.githubusercontent.com/Msdoors/mscripts/refs/heads/main/data/imagens/invisible-script.webp",
+      "downloadUrl": "scripts/invisíble-script.html",
+      "verified": true,
+      "fixed": false,
+      "author": "Rhya57",
+      "authorId": "896604349311115304"
     }
   ]
 }
