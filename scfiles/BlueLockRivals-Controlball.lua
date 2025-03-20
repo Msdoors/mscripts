@@ -1,3 +1,23 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true))()
+
+Library.DefaultColor = Color3.fromRGB(0,255,0)
+
+Library:Notification({
+
+    Text = "Fornecido por Mscripts | https://dsc.gg/betterstar",
+
+    Duration = 20
+
+})
+
+Library:Notification({
+
+    Text = "Crackeado por rhyan57",
+
+    Duration = 5
+
+})
+
 -- Serviços do Roblox
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
