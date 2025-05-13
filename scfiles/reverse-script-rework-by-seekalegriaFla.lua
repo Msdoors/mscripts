@@ -1,25 +1,96 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true))()
+local function getHttpService()
+    local success = pcall(function() 
+        return game:GetService("HttpService") 
+    end)
+    
+    if success then
+        return game:GetService("HttpService")
+    else
+        return nil
+    end
+end
 
-Library.DefaultColor = Color3.fromRGB(0,255,0)
+local function loadLibrary()
+    local methods = {
+        function() return game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true) end,
+        function() 
+            local http = getHttpService()
+            if http then
+                return http:GetAsync("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true)
+            end
+            return nil
+        end,
+        function() 
+            if syn and syn.request then
+                return syn.request({
+                    Url = "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant",
+                    Method = "GET"
+                }).Body
+            end
+            return nil
+        end,
+        function() 
+            if http and http.request then
+                return http.request({
+                    Url = "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant",
+                    Method = "GET"
+                }).Body
+            end
+            return nil
+        end,
+        function() 
+            if request then
+                return request({
+                    Url = "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant",
+                    Method = "GET"
+                }).Body
+            end
+            return nil
+        end,
+        function() 
+            if http_request then
+                return http_request({
+                    Url = "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant",
+                    Method = "GET"
+                }).Body
+            end
+            return nil
+        end
+    }
+    
+    for _, method in ipairs(methods) do
+        local success, result = pcall(method)
+        if success and result then
+            return loadstring(result)()
+        end
+    end
+    
+    -- Fallback if no HTTP methods work
+    return {
+        DefaultColor = Color3.fromRGB(0, 255, 0),
+        Notification = function(options) 
+            local msg = Instance.new("Message", workspace)
+            msg.Text = options.Text
+            game:GetService("Debris"):AddItem(msg, options.Duration or 5)
+        end
+    }
+end
+
+local Library = loadLibrary()
+
+Library.DefaultColor = Color3.fromRGB(0, 255, 0)
 
 Library:Notification({
-
     Text = "Fornecido por Mscripts | https://dsc.gg/betterstar",
-
     Duration = 20
-
 })
 
 Library:Notification({
-
     Text = "Feito por SeekAlegriaFla e modificado por Rhyan57",
-
     Duration = 3
-
 })
 
-
-wait (2)
+wait(2)
 
 local TweenService = game:GetService("TweenService")
 local msproject_Settings = {
@@ -37,7 +108,10 @@ local msproject_Settings = {
 local flashbacklength = 60
 local frameRate = 1 / 60
 
-local name = game:GetService("RbxAnalyticsService"):GetSessionId()
+local name = pcall(function() return game:GetService("RbxAnalyticsService"):GetSessionId() end) and 
+             game:GetService("RbxAnalyticsService"):GetSessionId() or 
+             "flashback_" .. math.random(1000, 9999)
+             
 local frames, LP, RS = {}, game:GetService("Players").LocalPlayer, game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
 
@@ -77,7 +151,17 @@ function flashback:Revert(char, hrp, hum)
         local lastframe = table.remove(frames)
         hrp.CFrame = lastframe[1]
         hrp.Velocity = lastframe[2]
-        hum:ChangeState(lastframe[3])
+        
+        local success = pcall(function()
+            hum:ChangeState(lastframe[3])
+        end)
+        
+        if not success then
+            pcall(function()
+                hum:SetStateEnabled(lastframe[3], true)
+            end)
+        end
+        
         hum.PlatformStand = lastframe[4]
 
         local currenttool = char:FindFirstChildOfClass("Tool")
@@ -98,10 +182,39 @@ function flashback:Revert(char, hrp, hum)
     self.isReversing = false
 end
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "FlashbackGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = LP:WaitForChild("PlayerGui")
+local function createGui()
+    local existingGui = LP:FindFirstChild("PlayerGui"):FindFirstChild("FlashbackGui")
+    if existingGui then
+        existingGui:Destroy()
+    end
+    
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "FlashbackGui"
+    screenGui.ResetOnSpawn = false
+    
+    -- Handle different property setters
+    local success = pcall(function()
+        screenGui.Parent = LP:WaitForChild("PlayerGui")
+    end)
+    
+    if not success then
+        -- Try alternative methods to set parent
+        pcall(function()
+            if syn and syn.protect_gui then
+                syn.protect_gui(screenGui)
+                screenGui.Parent = game:GetService("CoreGui")
+            elseif gethui then
+                screenGui.Parent = gethui()
+            else
+                screenGui.Parent = game:GetService("CoreGui")
+            end
+        end)
+    end
+    
+    return screenGui
+end
+
+local screenGui = createGui()
 
 local styles = {
     buttonSize = UDim2.new(0, 180, 0, 45),
@@ -305,7 +418,7 @@ local function toggleMenu()
     local isMenuVisible = menuFrame.Visible
     
     if not isMenuVisible then
-        menuFrame.Position = UDim2.new(1, -10, 0, 10) -- Garante a posição inicial
+        menuFrame.Position = UDim2.new(1, -10, 0, 10)
         menuFrame.Visible = true
         
         TweenService:Create(menuFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
@@ -326,6 +439,7 @@ local function toggleMenu()
         styles.colors.accent or 
         styles.colors.primary
 end
+
 local function updateKeybind(bindName, newKey)
     msproject_Settings.keybinds[bindName] = newKey
 end
@@ -367,7 +481,11 @@ local function toggleFlashback()
         BackgroundColor3 = targetColor
     }):Play()
 
-    local char = LP.Character or LP.CharacterAdded:Wait()
+    local char = LP.Character
+    if not char then
+        char = LP.CharacterAdded:Wait()
+    end
+    
     local hrp = char:WaitForChild("HumanoidRootPart")
     local hum = char:FindFirstChildWhichIsA("Humanoid")
 
@@ -422,15 +540,19 @@ UIS.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 local function step()
-    local char = LP.Character or LP.CharacterAdded:Wait()
-    local hrp = char:WaitForChild("HumanoidRootPart")
+    local char = LP.Character
+    if not char then return end
+    
+    local hrp = char:FindFirstChild("HumanoidRootPart")
     local hum = char:FindFirstChildWhichIsA("Humanoid")
+    
+    if not hrp or not hum then return end
+    
     if not flashback.isReversing then
         flashback:Advance(char, hrp, hum, true)
     end
 end
 
--- Character Added Handler for ResetOnSpawn = false functionality
 LP.CharacterAdded:Connect(function()
     frames = {}
     flashback.isReversing = false
@@ -439,7 +561,16 @@ LP.CharacterAdded:Connect(function()
     button.BackgroundColor3 = styles.colors.primary
 end)
 
-RS:BindToRenderStep(name, 1, step)
+local bindSuccess = pcall(function()
+    RS:BindToRenderStep(name, 1, step)
+end)
+
+if not bindSuccess then
+    local steppedConnection
+    steppedConnection = RS.Stepped:Connect(function()
+        step()
+    end)
+end
 
 local function createNotification(text, duration)
     duration = duration or 2
@@ -483,11 +614,11 @@ local function createNotification(text, duration)
 end
 
 local function addActionNotifications()
-    button.MouseButton1Click:Connect(function()
+    local notifConn1 = button.MouseButton1Click:Connect(function()
         createNotification(active and "Flashback Ativado" or "Flashback Desativado")
     end)
     
-    resetButton.MouseButton1Click:Connect(function()
+    local notifConn2 = resetButton.MouseButton1Click:Connect(function()
         createNotification("Flashback Redefinido")
     end)
 end
@@ -522,3 +653,9 @@ end
 createTooltip(button, "Ativar/Desativar o Flashback")
 createTooltip(resetButton, "Redefinir o estado do Flashback")
 createTooltip(menuButton, "Abrir menu de configurações")
+
+local successful = "Script de Flashback carregado com sucesso!"
+Library:Notification({
+    Text = successful,
+    Duration = 3
+})
