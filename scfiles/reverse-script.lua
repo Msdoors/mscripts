@@ -10,15 +10,6 @@ Library:Notification({
 
 })
 
-Library:Notification({
-
-    Text = "Fornecido por Envixity Scripts no YouTube",
-
-    Duration = 3
-
-})
-
-
 
 wait (2)
 
@@ -37,6 +28,12 @@ Library:Notification({
     Duration = 3
 
 })
+
+Library:Notification({
+    Text = " [ ATENÇÃO ] mscripts will be updated soon, and the loadstring for this script will be changed! Join our Discord to stay up to date and receive new updates.",
+    Duration = 40
+})
+setclipboard("https://discord.gg/nqRYDf3tu8")
 
 
 
