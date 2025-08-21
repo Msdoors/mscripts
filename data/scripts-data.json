@@ -12,6 +12,17 @@
       "authorId": "Owner"
     },
     {
+      "id": 1.2,
+      "title": "Wasted script",
+      "description": "Wasted script is FIRE.",
+      "image": "https://raw.githubusercontent.com/RhyanXG7/host-de-imagens/refs/heads/BetterStar/imagens-Host/download.jpeg",
+      "downloadUrl": "/scripts/WASTED-SCRIPT.html",
+      "verified": true,
+      "fixed": false,
+      "author": "Rhyan57",
+      "authorId": "Owner"
+    },
+    {
       "id": 2,
       "title": "Fly Gui v3",
       "description": "Script de voo para seus jogos favoritos!",
