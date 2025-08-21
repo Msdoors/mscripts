@@ -62,55 +62,85 @@ local function ScanLocalMusic()
     print("🔍 Escaneando músicas locais...")
     localMusicList = {}
     
-    local musicsFolderExists = pcall(function()
-        return isfolder("musics")
-    end)
-    
-    if not musicsFolderExists then
+    if not isfolder("musics") then
         makefolder("musics")
         print("📁 Pasta 'musics' criada!")
+        print("📝 Adicione suas músicas na pasta 'musics' seguindo a estrutura:")
+        print("   musics/NomeDaMusica/audio.mp3")
+        print("   musics/NomeDaMusica/letras.txt (opcional)")
+        print("   musics/NomeDaMusica/capa.png (opcional)")
+        print("   musics/NomeDaMusica/infos.json (opcional)")
         return {}
     end
     
-    local folders = listfiles("musics")
-    for _, folderPath in pairs(folders) do
-        local folderName = folderPath:match("musics[\\/](.+)")
-        if folderName and isfolder(folderPath) then
-            local hasAudio = isfile(folderPath .. "/audio.mp3")
-            local hasLyrics = isfile(folderPath .. "/letras.txt")
-            local hasImage = isfile(folderPath .. "/capa.png")
-            local hasInfo = isfile(folderPath .. "/infos.json")
+    local items = listfiles("musics")
+    
+    for _, itemPath in pairs(items) do
+        local itemName = itemPath:match("musics[\\/](.+)")
+        
+        if itemName and isfolder(itemPath) then
+            print("🔍 Verificando pasta: " .. itemName)
+            
+            local hasAudio = isfile(itemPath .. "/audio.mp3")
+            local hasLyrics = isfile(itemPath .. "/letras.txt")
+            local hasImage = isfile(itemPath .. "/capa.png")
+            local hasInfo = isfile(itemPath .. "/infos.json")
             
             if hasAudio then
                 local musicInfo = {
-                    name = folderName,
-                    path = folderPath,
+                    name = itemName,
+                    path = itemPath,
                     hasLyrics = hasLyrics,
                     hasImage = hasImage,
-                    hasInfo = hasInfo
+                    hasInfo = hasInfo,
+                    title = itemName,
+                    artist = "Artista Desconhecido",
+                    colors = {}
                 }
                 
                 if hasInfo then
-                    local infoContent = readfile(folderPath .. "/infos.json")
-                    local success, info = pcall(function()
-                        return HttpService:JSONDecode(infoContent)
+                    local success, infoContent = pcall(function()
+                        return readfile(itemPath .. "/infos.json")
                     end)
-                    if success then
-                        musicInfo.title = info.title or folderName
-                        musicInfo.artist = info.artist or "Artista Desconhecido"
-                        musicInfo.colors = info.colors or {}
+                    
+                    if success and infoContent then
+                        local parseSuccess, info = pcall(function()
+                            return HttpService:JSONDecode(infoContent)
+                        end)
+                        
+                        if parseSuccess and info then
+                            musicInfo.title = info.title or itemName
+                            musicInfo.artist = info.artist or "Artista Desconhecido"
+                            musicInfo.colors = info.colors or {}
+                            print("📋 Informações carregadas para: " .. musicInfo.title)
+                        else
+                            print("⚠️ Erro ao ler infos.json para: " .. itemName)
+                        end
                     end
                 end
                 
                 table.insert(localMusicList, musicInfo)
-                print("🎵 Encontrada: " .. folderName)
+                print("✅ Música adicionada: " .. musicInfo.title .. " - " .. musicInfo.artist)
+            else
+                print("❌ Pasta '" .. itemName .. "' não possui audio.mp3")
             end
+        elseif itemName and not isfolder(itemPath) then
+            print("📄 Arquivo ignorado: " .. itemName .. " (não é uma pasta)")
         end
     end
     
-    print("📊 Total de músicas locais encontradas: " .. #localMusicList)
+    if #localMusicList == 0 then
+        print("📁 Nenhuma música encontrada na pasta 'musics'")
+        print("💡 Para adicionar músicas, crie uma pasta para cada música dentro de 'musics'")
+        print("   Exemplo: musics/MinhaMusica/audio.mp3")
+    else
+        print("🎉 Total de músicas locais encontradas: " .. #localMusicList)
+    end
+    
     return localMusicList
 end
+
+
 
 local function ParseLyrics(content)
     if not content then
