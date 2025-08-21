@@ -9,7 +9,7 @@ local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 local CONFIG = {
-    FONT_URL = "https://www.netfontes.com.br/dow.php?cod=yellow_submarine",
+    FONT_URL = "https://github.com/Msdoors/mscripts/raw/refs/heads/main/scfiles/beatles.TTF",
     VOLUME = 0.8,
     LYRICS_DURATION = 4.5,
     PARTICLE_COUNT = 120,
