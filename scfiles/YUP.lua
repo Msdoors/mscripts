@@ -8,8 +8,6 @@ local SoundService = game:GetService("SoundService")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
-local Obsidian = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/obsidian.lua"))()
-
 local CONFIG = {
     FONT_URL = "https://www.netfontes.com.br/dow.php?cod=yellow_submarine",
     VOLUME = 0.8,
