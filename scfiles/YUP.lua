@@ -24,7 +24,6 @@ local CONFIG = {
         IMAGE = "https://raw.githubusercontent.com/RhyanXG7/host-de-imagens/refs/heads/BetterStar/imagens-Host/download.jpeg",
         LYRICS = "https://raw.githubusercontent.com/Msdoors/Msdoors.gg/refs/heads/main/Scripts/Msdoors/lirycs.txt"
     }
-    }
 }
 
 local currentMusicData = CONFIG.DEFAULT_MUSIC
