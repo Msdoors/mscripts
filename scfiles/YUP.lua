@@ -21,7 +21,9 @@ local CONFIG = {
         URL = "https://github.com/Msdoors/Msdoors.gg/raw/refs/heads/main/Scripts/Msdoors/INIT_SOUND.mp3",
         TITLE = "WASTED (NIGHTCORE)",
         ARTIST = "JUICE WRLD, LilStoic",
-        IMAGE = "https://raw.githubusercontent.com/RhyanXG7/host-de-imagens/refs/heads/BetterStar/imagens-Host/download.jpeg"
+        IMAGE = "https://raw.githubusercontent.com/RhyanXG7/host-de-imagens/refs/heads/BetterStar/imagens-Host/download.jpeg",
+        LYRICS = "https://raw.githubusercontent.com/Msdoors/Msdoors.gg/refs/heads/main/Scripts/Msdoors/lirycs.txt"
+    }
     }
 }
 
@@ -1052,8 +1054,7 @@ local function CreateMusicPlayer()
         activeLyrics = newActiveLyrics
     end
     
-    
-    local function LoadMusic(musicData, isLocal)
+local function LoadMusic(musicData, isLocal)
     print("🎵 Carregando música: " .. (musicData.title or musicData.name or "Música"))
     
     if currentSound then
@@ -1136,7 +1137,21 @@ local function CreateMusicPlayer()
                 end
             end
             
-            currentLyrics = ParseLyrics(nil)
+            if musicData.LYRICS then
+                local lyricsSuccess, lyricsContent = pcall(function()
+                    return game:HttpGet(musicData.LYRICS)
+                end)
+                if lyricsSuccess and lyricsContent then
+                    currentLyrics = ParseLyrics(lyricsContent)
+                    print("✅ Letras da música padrão carregadas!")
+                else
+                    currentLyrics = ParseLyrics(nil)
+                    warn("⚠️ Erro ao carregar letras da música padrão")
+                end
+            else
+                currentLyrics = ParseLyrics(nil)
+            end
+            
             success = true
             print("✅ Música padrão carregada!")
         else
@@ -1174,7 +1189,7 @@ local function CreateMusicPlayer()
         songTitle.Text = "Erro ao carregar"
         artistLabel.Text = "🎤 Falha no carregamento"
     end
-    end
+end
     
 local function PlayMusic()
     if not currentSound then
