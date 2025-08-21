@@ -1052,74 +1052,114 @@ local function CreateMusicPlayer()
         activeLyrics = newActiveLyrics
     end
     
+    
     local function LoadMusic(musicData, isLocal)
-        print("🎵 Carregando música: " .. (musicData.title or musicData.name or "Música"))
-        
-        if currentSound then
-            currentSound:Destroy()
-            currentSound = nil
-        end
-        
-        CleanupLyrics()
-        isPlaying = false
-        playBtn.Text = "▶"
-        playBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 100)
-        
-        if isLocal then
-            currentSound = Instance.new("Sound")
-            currentSound.SoundId = (getcustomasset or getsynasset)(musicData.path .. "/audio.mp3")
-            currentSound.Volume = CONFIG.VOLUME
-            currentSound.Parent = workspace
+    print("🎵 Carregando música: " .. (musicData.title or musicData.name or "Música"))
+    
+    if currentSound then
+        currentSound:Stop()
+        currentSound:Destroy()
+        currentSound = nil
+    end
+    
+    CleanupLyrics()
+    isPlaying = false
+    playBtn.Text = "▶"
+    playBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 100)
+    
+    timeDisplay.Text = "00:00"
+    progressBar.Size = UDim2.new(0, 0, 1, 0)
+    
+    local success = false
+    
+    if isLocal then
+        local audioPath = musicData.path .. "/audio.mp3"
+        if isfile(audioPath) then
+            local soundSuccess, soundId = pcall(function()
+                return (getcustomasset or getsynasset)(audioPath)
+            end)
             
-            songTitle.Text = musicData.title or musicData.name
-            artistLabel.Text = "🎤 " .. (musicData.artist or "Artista Desconhecido")
-            
-            if musicData.hasImage then
-                albumArt.Image = (getcustomasset or getsynasset)(musicData.path .. "/capa.png")
-            end
-            
-            if musicData.hasLyrics then
-                local lyricsContent = readfile(musicData.path .. "/letras.txt")
-                currentLyrics = ParseLyrics(lyricsContent)
-            else
-                currentLyrics = ParseLyrics(nil)
-            end
-            
-            print("✅ Música local carregada!")
-        else
-            local soundId = DownloadAsset(musicData.URL, "current_song.mp3", "audio")
-            if soundId then
+            if soundSuccess and soundId then
                 currentSound = Instance.new("Sound")
                 currentSound.SoundId = soundId
                 currentSound.Volume = CONFIG.VOLUME
-                currentSound.Parent = workspace
+                currentSound.Parent = SoundService
                 
-                songTitle.Text = musicData.TITLE
-                artistLabel.Text = "🎤 " .. musicData.ARTIST
+                songTitle.Text = musicData.title or musicData.name
+                artistLabel.Text = "🎤 " .. (musicData.artist or "Artista Desconhecido")
                 
-                if musicData.IMAGE then
-                    local imageId = DownloadAsset(musicData.IMAGE, "current_cover.jpg", "image")
-                    if imageId then
+                if musicData.hasImage and isfile(musicData.path .. "/capa.png") then
+                    local imageSuccess, imageId = pcall(function()
+                        return (getcustomasset or getsynasset)(musicData.path .. "/capa.png")
+                    end)
+                    if imageSuccess and imageId then
                         albumArt.Image = imageId
                     end
                 end
                 
-                currentLyrics = ParseLyrics(nil)
-                print("✅ Música padrão carregada!")
-            end
-        end
-        
-        if currentSound then
-            currentSound.Ended:Connect(function()
-                isPlaying = false
-                playBtn.Text = "▶"
-                playBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 100)
-                progressBar.Size = UDim2.new(0, 0, 1, 0)
-                timeDisplay.Text = "00:00"
-                CleanupLyrics()
+                if musicData.hasLyrics and isfile(musicData.path .. "/letras.txt") then
+                    local lyricsSuccess, lyricsContent = pcall(function()
+                        return readfile(musicData.path .. "/letras.txt")
+                    end)
+                    if lyricsSuccess then
+                        currentLyrics = ParseLyrics(lyricsContent)
+                    else
+                        currentLyrics = ParseLyrics(nil)
+                    end
+                else
+                    currentLyrics = ParseLyrics(nil)
+                end
                 
-                if eqEnabled then
-                    for _, barData in ipairs(eqBars) do
+                success = true
+                print("✅ Música local carregada!")
+            else
+                warn("❌ Erro ao carregar arquivo de áudio: " .. audioPath)
+            end
+        else
+            warn("❌ Arquivo de áudio não encontrado: " .. audioPath)
+        end
+    else
+        local soundId = DownloadAsset(musicData.URL, "current_song.mp3", "audio")
+        if soundId then
+            currentSound = Instance.new("Sound")
+            currentSound.SoundId = soundId
+            currentSound.Volume = CONFIG.VOLUME
+            currentSound.Parent = SoundService
+            
+            songTitle.Text = musicData.TITLE
+            artistLabel.Text = "🎤 " .. musicData.ARTIST
+            
+            if musicData.IMAGE then
+                local imageId = DownloadAsset(musicData.IMAGE, "current_cover.jpg", "image")
+                if imageId then
+                    albumArt.Image = imageId
+                end
+            end
+            
+            currentLyrics = ParseLyrics(nil)
+            success = true
+            print("✅ Música padrão carregada!")
+        else
+            warn("❌ Erro ao baixar música padrão")
+        end
+    end
+    
+    if success and currentSound then
+        currentSound.Loaded:Connect(function()
+            print("🎵 Som carregado e pronto para reprodução")
+        end)
+        
+        currentSound.Ended:Connect(function()
+            isPlaying = false
+            playBtn.Text = "▶"
+            playBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 100)
+            progressBar.Size = UDim2.new(0, 0, 1, 0)
+            timeDisplay.Text = "00:00"
+            CleanupLyrics()
+            
+            if eqEnabled then
+                for _, barData in ipairs(eqBars) do
+                    if barData.frame and barData.frame.Parent then
                         local resetTween = TweenService:Create(barData.frame,
                             TweenInfo.new(0.8, Enum.EasingStyle.Quint),
                             {Size = UDim2.new(0, barData.frame.Size.X.Offset, 0, barData.baseHeight)}
@@ -1127,23 +1167,41 @@ local function CreateMusicPlayer()
                         resetTween:Play()
                     end
                 end
-            end)
-        end
+            end
+        end)
+    else
+        warn("❌ Falha ao carregar música")
+        songTitle.Text = "Erro ao carregar"
+        artistLabel.Text = "🎤 Falha no carregamento"
+    end
     end
     
-    local function PlayMusic()
-        if currentSound and currentSound.IsPlaying then
-            return
-        end
-        
-        if currentSound then
-            currentSound:Play()
-            isPlaying = true
-            
-            playBtn.Text = "⏸"
-            playBtn.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
-            print("▶️ Reproduzindo música...")
-        end
+local function PlayMusic()
+    if not currentSound then
+        warn("❌ Nenhuma música carregada")
+        return
+    end
+    
+    if currentSound.IsPlaying then
+        print("⚠️ Música já está tocando")
+        return
+    end
+    
+    local playSuccess, errorMsg = pcall(function()
+        currentSound:Play()
+    end)
+    
+    if playSuccess then
+        isPlaying = true
+        playBtn.Text = "⏸"
+        playBtn.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+        print("▶️ Reproduzindo música...")
+    else
+        warn("❌ Erro ao reproduzir música: " .. tostring(errorMsg))
+        isPlaying = false
+        playBtn.Text = "▶"
+        playBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    end
     end
     
     local function StopMusic()
@@ -1270,15 +1328,27 @@ local function CreateMusicPlayer()
         print(particlesEnabled and "✨ Partículas ativadas!" or "✨ Partículas desativadas!")
     end
     
-    playBtn.MouseButton1Click:Connect(function()
-        if currentSound and currentSound.IsPlaying then
+  playBtn.MouseButton1Click:Connect(function()
+    if not currentSound then
+        warn("❌ Nenhuma música carregada para reproduzir")
+        return
+    end
+    
+    if currentSound.IsPlaying then
+        local pauseSuccess = pcall(function()
             currentSound:Pause()
+        end)
+        if pauseSuccess then
             isPlaying = false
             playBtn.Text = "▶"
             playBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 100)
             print("⏸️ Música pausada.")
-        elseif currentSound and not currentSound.IsPlaying then
+        end
+    elseif isPlaying == false then
+        local resumeSuccess = pcall(function()
             currentSound:Resume()
+        end)
+        if resumeSuccess then
             isPlaying = true
             playBtn.Text = "⏸"
             playBtn.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
@@ -1286,7 +1356,10 @@ local function CreateMusicPlayer()
         else
             PlayMusic()
         end
-    end)
+    else
+        PlayMusic()
+    end
+end)
     
     loadBtn.MouseButton1Click:Connect(function()
         local currentSelection = nil
@@ -1311,28 +1384,36 @@ local function CreateMusicPlayer()
     
     connections.particles = RunService.Heartbeat:Connect(UpdateParticles)
     connections.lyrics = RunService.Heartbeat:Connect(UpdateLyrics)
+  spawn(function()
+    wait(1)
     
     if glowEffect and glowEffect.Parent then
-    local glowTween = TweenService:Create(glowEffect,
-        TweenInfo.new(5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-        {Color = Color3.fromRGB(255, 100, 200)}
-    )
-    glowTween:Play()
-    else
-    print("❌ glowEffect é nil ou foi destruído!")
-    end 
+        local glowTween = TweenService:Create(glowEffect,
+            TweenInfo.new(5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+            {Color = Color3.fromRGB(255, 100, 200)}
+        )
+        glowTween:Play()
+    end
     
-    local artTween = TweenService:Create(artGlow,
-        TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-        {Color = Color3.fromRGB(100, 255, 200)}
-    )
-    artTween:Play()
+    if albumArt and albumArt:FindFirstChild("UIStroke") then
+        local artGlow = albumArt:FindFirstChild("UIStroke")
+        local artTween = TweenService:Create(artGlow,
+            TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+            {Color = Color3.fromRGB(100, 255, 200)}
+        )
+        artTween:Play()
+    end
     
-    local selectorGlowTween = TweenService:Create(musicSelector:FindFirstChild("UIStroke"),
-        TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-        {Color = Color3.fromRGB(255, 150, 100)}
-    )
-    selectorGlowTween:Play()
+    if musicSelector and musicSelector:FindFirstChild("UIStroke") then
+        local selectorGlow = musicSelector:FindFirstChild("UIStroke")
+        local selectorGlowTween = TweenService:Create(selectorGlow,
+            TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+            {Color = Color3.fromRGB(255, 150, 100)}
+        )
+        selectorGlowTween:Play()
+    end
+end)
+    
     
     spawn(function()
         while gui.Parent do
