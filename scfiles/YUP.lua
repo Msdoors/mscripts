@@ -1312,11 +1312,15 @@ local function CreateMusicPlayer()
     connections.particles = RunService.Heartbeat:Connect(UpdateParticles)
     connections.lyrics = RunService.Heartbeat:Connect(UpdateLyrics)
     
+    if glowEffect and glowEffect.Parent then
     local glowTween = TweenService:Create(glowEffect,
         TweenInfo.new(5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
         {Color = Color3.fromRGB(255, 100, 200)}
     )
     glowTween:Play()
+    else
+    print("❌ glowEffect é nil ou foi destruído!")
+    end 
     
     local artTween = TweenService:Create(artGlow,
         TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
