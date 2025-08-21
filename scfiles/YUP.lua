@@ -646,9 +646,7 @@ local function CreateLyricElement(text, container, intensity, isActive)
     lyric.BackgroundTransparency = 1
     lyric.Text = text
     lyric.TextScaled = true
-    lyric.Font = fontLoaded and Enum.Font.SpecialElite or Enum.Font.GothamBold
-    lyric.TextStrokeTransparency = 0.1
-    lyric.TextStrokeColor3 = Color3.new(0, 0, 0)
+    lyric.Font = fontLoaded and Enum.Font.SpecialElite or Enum.Font.FredokaOne
     lyric.Parent = lyricContainer
     
     local underline = Instance.new("Frame")
