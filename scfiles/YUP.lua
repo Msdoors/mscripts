@@ -634,8 +634,8 @@ local function GetRandomPosition()
     
     return UDim2.new(x, 0, y, 0)
 end
-
-local function CreateLyricElement(text, container, intensity, isActive)
+-- CORREÇÃO 2: CreateLyricElement com fonte melhor e glow controlado
+local function CreateLyricElement(text, container, intensity, isActive, customColor)
     local lyricContainer = Instance.new("Frame")
     lyricContainer.Name = "LyricContainer_" .. tostring(math.random(1000, 9999))
     lyricContainer.Size = UDim2.new(0, 450, 0, 90)
@@ -649,7 +649,8 @@ local function CreateLyricElement(text, container, intensity, isActive)
     lyric.BackgroundTransparency = 1
     lyric.Text = text
     lyric.TextScaled = true
-    lyric.Font = fontLoaded and Enum.Font.SpecialElite or Enum.Font.FredokaOne
+    -- CORREÇÃO: Fonte melhor e mais legível
+    lyric.Font = Enum.Font.GothamBold
     lyric.Parent = lyricContainer
     
     local underline = Instance.new("Frame")
@@ -663,15 +664,24 @@ local function CreateLyricElement(text, container, intensity, isActive)
     underCorner.CornerRadius = UDim.new(0, 3)
     underCorner.Parent = underline
     
-    local hue = (tick() * 0.4 + math.random()) % 1
-    local mainColor = Color3.fromHSV(hue, 0.95, intensity)
+    -- CORREÇÃO: Usar cor personalizada se fornecida, senão usar cor baseada em hue
+    local mainColor
+    if customColor then
+        mainColor = customColor
+    else
+        local hue = (tick() * 0.4 + math.random()) % 1
+        mainColor = Color3.fromHSV(hue, 0.95, intensity)
+    end
+    
     lyric.TextColor3 = mainColor
     underline.BackgroundColor3 = mainColor
     
+    -- CORREÇÃO: Glow muito mais controlado e legível
     local glow = Instance.new("UIStroke")
-    glow.Color = Color3.fromHSV(hue, 1, intensity)
-    glow.Thickness = math.floor(intensity * 8)
-    glow.Transparency = 0.2
+    glow.Color = mainColor
+    -- CORREÇÃO: Thickness muito menor para manter legibilidade
+    glow.Thickness = math.min(2, math.floor(intensity * 3))
+    glow.Transparency = 0.6 -- CORREÇÃO: Mais transparente
     glow.Parent = lyric
     
     local effect = lyricEffects[math.random(1, #lyricEffects)]
@@ -718,7 +728,8 @@ local function CreateLyricElement(text, container, intensity, isActive)
         glow.Thickness = 0
         local glowTween = TweenService:Create(glow,
             TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-            {Thickness = intensity * 12}
+    
+            {Thickness = math.min(3, intensity * 4)}
         )
         glowTween:Play()
     elseif effect == "wave" then
@@ -742,7 +753,9 @@ local function CreateLyricElement(text, container, intensity, isActive)
             for i = 1, 30 do
                 local rainbowHue = (i * 0.1) % 1
                 lyric.TextColor3 = Color3.fromHSV(rainbowHue, 0.9, 0.95)
+
                 glow.Color = Color3.fromHSV(rainbowHue, 1, 1)
+                glow.Thickness = math.min(2, intensity * 2)
                 wait(0.1)
             end
         end)
@@ -769,7 +782,8 @@ local function CreateLyricElement(text, container, intensity, isActive)
         spawn(function()
             for i = 1, 20 do
                 local pulseIntensity = 1 + math.sin(i * 0.5) * 0.3
-                glow.Thickness = intensity * 10 * pulseIntensity
+
+                glow.Thickness = math.min(3, intensity * 3 * pulseIntensity)
                 wait(0.2)
             end
         end)
@@ -777,6 +791,7 @@ local function CreateLyricElement(text, container, intensity, isActive)
     
     return lyricContainer, lyric, underline
 end
+
 
 local function CreateParticleSystem(parent)
     if not CONFIG.PARTICLES_ENABLED then return {}, nil end
@@ -944,115 +959,156 @@ local function CreateMusicPlayer()
             end
         end
     end
+
+
+local function ApplyMusicColors(musicData, elements)
+   if musicData.colors and type(musicData.colors) == "table" then
+       if musicData.colors.primary then
+           local primaryColor = Color3.fromRGB(
+               musicData.colors.primary.r or 255,
+               musicData.colors.primary.g or 100,
+               musicData.colors.primary.b or 200
+           )
+           
+           if elements.mainGlow then
+               elements.mainGlow.Color = primaryColor
+           end
+           
+           if elements.albumGlow then
+               elements.albumGlow.Color = primaryColor
+           end
+       end
+       
+       if musicData.colors.secondary then
+           local secondaryColor = Color3.fromRGB(
+               musicData.colors.secondary.r or 100,
+               musicData.colors.secondary.g or 200,
+               musicData.colors.secondary.b or 255
+           )
+           
+           if elements.selectorGlow then
+               elements.selectorGlow.Color = secondaryColor
+           end
+       end
+       
+       if musicData.colors.lyrics then
+           elements.lyricsColor = Color3.fromRGB(
+               musicData.colors.lyrics.r or 255,
+               musicData.colors.lyrics.g or 255,
+               musicData.colors.lyrics.b or 255
+           )
+       end
+   end
+end
+
+local function UpdateLyrics()
+    if not isPlaying or not currentSound then return end
     
-    local function UpdateLyrics()
-        if not isPlaying or not currentSound then return end
-        
-        local currentTime = currentSound.TimePosition
-        local duration = currentSound.TimeLength or 1
-        
-        timeDisplay.Text = FormatTime(currentTime)
-        
-        local progress = math.min(currentTime / duration, 1)
-        progressBar.Size = UDim2.new(progress, 0, 1, 0)
-        
-        local audioVolume = (currentSound.Volume or 0) + math.random() * 0.3
-        UpdateEqualizer(audioVolume, currentTime)
-        
-        if #currentLyrics == 0 then return end
-        
-        local newActiveLyrics = {}
-        local displayCount = 0
-        
-        for _, lyricData in ipairs(currentLyrics) do
-            if currentTime >= lyricData.time and currentTime <= lyricData.endTime then
-                displayCount = displayCount + 1
-                if displayCount <= CONFIG.MAX_VISIBLE_LYRICS then
-                    local intensity = displayCount == 1 and 1 or (0.7 - (displayCount - 1) * 0.1)
-                    local isActive = displayCount == 1
-                    
-                    local existingLyric = nil
-                    for _, existing in ipairs(activeLyrics) do
-                        if existing.text == lyricData.text then
-                            existingLyric = existing
-                            break
-                        end
+    local currentTime = currentSound.TimePosition
+    local duration = currentSound.TimeLength or 1
+    
+    timeDisplay.Text = FormatTime(currentTime)
+    
+    local progress = math.min(currentTime / duration, 1)
+    progressBar.Size = UDim2.new(progress, 0, 1, 0)
+    
+    local audioVolume = (currentSound.Volume or 0) + math.random() * 0.3
+    UpdateEqualizer(audioVolume, currentTime)
+    
+    if #currentLyrics == 0 then return end
+    
+    local newActiveLyrics = {}
+    local displayCount = 0
+    
+    for _, lyricData in ipairs(currentLyrics) do
+        if currentTime >= lyricData.time and currentTime <= lyricData.endTime then
+            displayCount = displayCount + 1
+            if displayCount <= CONFIG.MAX_VISIBLE_LYRICS then
+                local intensity = displayCount == 1 and 1 or (0.7 - (displayCount - 1) * 0.1)
+                local isActive = displayCount == 1
+                
+                local existingLyric = nil
+                for _, existing in ipairs(activeLyrics) do
+                    if existing.text == lyricData.text then
+                        existingLyric = existing
+                        break
                     end
-                    
-                    if not existingLyric then
-                        local container, lyric, underline = CreateLyricElement(lyricData.text, lyricsDisplay, intensity, isActive)
-                        table.insert(newActiveLyrics, {
-                            container = container,
-                            lyric = lyric,
-                            underline = underline,
-                            text = lyricData.text,
-                            endTime = lyricData.endTime,
-                            isActive = isActive,
-                            created = tick()
-                        })
-                    else
-                        table.insert(newActiveLyrics, existingLyric)
-                    end
+                end
+                
+                if not existingLyric then
+                    local container, lyric, underline = CreateLyricElement(lyricData.text, lyricsDisplay, intensity, isActive)
+                    table.insert(newActiveLyrics, {
+                        container = container,
+                        lyric = lyric,
+                        underline = underline,
+                        text = lyricData.text,
+                        endTime = lyricData.endTime,
+                        isActive = isActive,
+                        created = tick()
+                    })
+                else
+                    table.insert(newActiveLyrics, existingLyric)
                 end
             end
         end
+    end
+    
+    for _, oldLyric in ipairs(activeLyrics) do
+        local stillActive = false
+        for _, newLyric in ipairs(newActiveLyrics) do
+            if oldLyric.text == newLyric.text then
+                stillActive = true
+                break
+            end
+        end
         
-        for _, oldLyric in ipairs(activeLyrics) do
-            local stillActive = false
-            for _, newLyric in ipairs(newActiveLyrics) do
-                if oldLyric.text == newLyric.text then
-                    stillActive = true
-                    break
-                end
+        if not stillActive and oldLyric.container.Parent then
+            local fadeDirection = math.random(1, 4)
+            local targetPos
+            
+            if fadeDirection == 1 then
+                targetPos = UDim2.new(-0.8, 0, oldLyric.container.Position.Y.Scale, 0)
+            elseif fadeDirection == 2 then
+                targetPos = UDim2.new(1.2, 0, oldLyric.container.Position.Y.Scale, 0)
+            elseif fadeDirection == 3 then
+                targetPos = UDim2.new(oldLyric.container.Position.X.Scale, 0, -0.3, 0)
+            else
+                targetPos = UDim2.new(oldLyric.container.Position.X.Scale, 0, 1.2, 0)
             end
             
-            if not stillActive and oldLyric.container.Parent then
-                local fadeDirection = math.random(1, 4)
-                local targetPos
-                
-                if fadeDirection == 1 then
-                    targetPos = UDim2.new(-0.8, 0, oldLyric.container.Position.Y.Scale, 0)
-                elseif fadeDirection == 2 then
-                    targetPos = UDim2.new(1.2, 0, oldLyric.container.Position.Y.Scale, 0)
-                elseif fadeDirection == 3 then
-                    targetPos = UDim2.new(oldLyric.container.Position.X.Scale, 0, -0.3, 0)
-                else
-                    targetPos = UDim2.new(oldLyric.container.Position.X.Scale, 0, 1.2, 0)
+            local fadeOut = TweenService:Create(oldLyric.container,
+                TweenInfo.new(2, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
+                {
+                    Position = targetPos,
+                    Size = UDim2.new(0, 0, 0, 90)
+                }
+            )
+            
+            local transparencyTween = TweenService:Create(oldLyric.lyric,
+                TweenInfo.new(1.5, Enum.EasingStyle.Quad),
+                {TextTransparency = 1}
+            )
+            
+            local rotateTween = TweenService:Create(oldLyric.lyric,
+                TweenInfo.new(2, Enum.EasingStyle.Quint),
+                {Rotation = math.random(-180, 180)}
+            )
+            
+            fadeOut:Play()
+            transparencyTween:Play()
+            rotateTween:Play()
+            
+            local cleanup = fadeOut.Completed:Connect(function()
+                if oldLyric.container.Parent then
+                    oldLyric.container:Destroy()
                 end
-                
-                local fadeOut = TweenService:Create(oldLyric.container,
-                    TweenInfo.new(2, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
-                    {
-                        Position = targetPos,
-                        Size = UDim2.new(0, 0, 0, 90)
-                    }
-                )
-                
-                local transparencyTween = TweenService:Create(oldLyric.lyric,
-                    TweenInfo.new(1.5, Enum.EasingStyle.Quad),
-                    {TextTransparency = 1}
-                )
-                
-                local rotateTween = TweenService:Create(oldLyric.lyric,
-                    TweenInfo.new(2, Enum.EasingStyle.Quint),
-                    {Rotation = math.random(-180, 180)}
-                )
-                
-                fadeOut:Play()
-                transparencyTween:Play()
-                rotateTween:Play()
-                
-                local cleanup = fadeOut.Completed:Connect(function()
-                    if oldLyric.container.Parent then
-                        oldLyric.container:Destroy()
-                    end
-                end)
-                table.insert(cleanupTasks, cleanup)
-            end
+            end)
+            table.insert(cleanupTasks, cleanup)
         end
-        
-        activeLyrics = newActiveLyrics
     end
+    
+    activeLyrics = newActiveLyrics
+end
     
 local function LoadMusic(musicData, isLocal)
     print("🎵 Carregando música: " .. (musicData.title or musicData.name or "Música"))
@@ -1072,6 +1128,12 @@ local function LoadMusic(musicData, isLocal)
     progressBar.Size = UDim2.new(0, 0, 1, 0)
     
     local success = false
+    local colorElements = {
+        mainGlow = glowEffect,
+        albumGlow = albumArt:FindFirstChild("UIStroke"),
+        selectorGlow = musicSelector:FindFirstChild("UIStroke"),
+        lyricsColor = nil
+    }
     
     if isLocal then
         local audioPath = musicData.path .. "/audio.mp3"
@@ -1089,6 +1151,9 @@ local function LoadMusic(musicData, isLocal)
                 songTitle.Text = musicData.title or musicData.name
                 artistLabel.Text = "🎤 " .. (musicData.artist or "Artista Desconhecido")
                 
+                -- CORREÇÃO: Aplicar cores do infos.json
+                ApplyMusicColors(musicData, colorElements)
+                
                 if musicData.hasImage and isfile(musicData.path .. "/capa.png") then
                     local imageSuccess, imageId = pcall(function()
                         return (getcustomasset or getsynasset)(musicData.path .. "/capa.png")
@@ -1104,6 +1169,8 @@ local function LoadMusic(musicData, isLocal)
                     end)
                     if lyricsSuccess then
                         currentLyrics = ParseLyrics(lyricsContent)
+                        -- Armazenar cor das letras para uso posterior
+                        currentMusicData.lyricsColor = colorElements.lyricsColor
                     else
                         currentLyrics = ParseLyrics(nil)
                     end
@@ -1190,7 +1257,7 @@ local function LoadMusic(musicData, isLocal)
         artistLabel.Text = "🎤 Falha no carregamento"
     end
 end
-    
+        
 local function PlayMusic()
     if not currentSound then
         warn("❌ Nenhuma música carregada")
