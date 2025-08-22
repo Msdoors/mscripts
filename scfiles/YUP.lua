@@ -258,152 +258,155 @@ local function CreateEqualizer(parent)
 end
 
 local function CreateMusicSelector(parent)
-    local selectorFrame = Instance.new("Frame")
-    selectorFrame.Name = "MusicSelector"
-    selectorFrame.Size = UDim2.new(0, 300, 0, 80)
-    selectorFrame.Position = UDim2.new(0, 30, 0, 30)
-    selectorFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
-    selectorFrame.BorderSizePixel = 0
-    selectorFrame.Parent = parent
-    
-    local selectorCorner = Instance.new("UICorner")
-    selectorCorner.CornerRadius = UDim.new(0, 12)
-    selectorCorner.Parent = selectorFrame
-    
-    local selectorGlow = Instance.new("UIStroke")
-    selectorGlow.Color = Color3.fromRGB(100, 150, 255)
-    selectorGlow.Thickness = 2
-    selectorGlow.Transparency = 0.4
-    selectorGlow.Parent = selectorFrame
-    
-    local dropdownBtn = Instance.new("TextButton")
-    dropdownBtn.Name = "DropdownButton"
-    dropdownBtn.Size = UDim2.new(0, 180, 0, 35)
-    dropdownBtn.Position = UDim2.new(0, 10, 0, 10)
-    dropdownBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 40)
-    dropdownBtn.Text = "Selecionar Música Local ▼"
-    dropdownBtn.TextColor3 = Color3.new(1, 1, 1)
-    dropdownBtn.TextScaled = true
-    dropdownBtn.Font = Enum.Font.JosefinSans
-    dropdownBtn.BorderSizePixel = 0
-    dropdownBtn.Parent = selectorFrame
-    
-    local dropCorner = Instance.new("UICorner")
-    dropCorner.CornerRadius = UDim.new(0, 8)
-    dropCorner.Parent = dropdownBtn
-    
-    local loadBtn = Instance.new("TextButton")
-    loadBtn.Name = "LoadButton"
-    loadBtn.Size = UDim2.new(0, 80, 0, 35)
-    loadBtn.Position = UDim2.new(0, 200, 0, 10)
-    loadBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 100)
-    loadBtn.Text = "Carregar"
-    loadBtn.TextColor3 = Color3.new(1, 1, 1)
-    loadBtn.TextScaled = true
-    loadBtn.Font = Enum.Font.JosefinSans
-    loadBtn.BorderSizePixel = 0
-    loadBtn.Parent = selectorFrame
-    
-    local loadCorner = Instance.new("UICorner")
-    loadCorner.CornerRadius = UDim.new(0, 8)
-    loadCorner.Parent = loadBtn
-    
-    local refreshBtn = Instance.new("TextButton")
-    refreshBtn.Name = "RefreshButton"
-    refreshBtn.Size = UDim2.new(0, 280, 0, 25)
-    refreshBtn.Position = UDim2.new(0, 10, 0, 50)
-    refreshBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
-    refreshBtn.Text = "🔄 Atualizar Lista"
-    refreshBtn.TextColor3 = Color3.new(1, 1, 1)
-    refreshBtn.TextScaled = true
-    refreshBtn.Font = Enum.Font.JosefinSans
-    refreshBtn.BorderSizePixel = 0
-    refreshBtn.Parent = selectorFrame
-    
-    local refreshCorner = Instance.new("UICorner")
-    refreshCorner.CornerRadius = UDim.new(0, 6)
-    refreshCorner.Parent = refreshBtn
-    
-    local dropdownMenu = Instance.new("ScrollingFrame")
-    dropdownMenu.Name = "DropdownMenu"
-    dropdownMenu.Size = UDim2.new(0, 180, 0, 0)
-    dropdownMenu.Position = UDim2.new(0, 10, 0, 45)
-    dropdownMenu.BackgroundColor3 = Color3.fromRGB(20, 20, 35)
-    dropdownMenu.BorderSizePixel = 0
-    dropdownMenu.Visible = false
-    dropdownMenu.ScrollBarThickness = 4
-    dropdownMenu.Parent = selectorFrame
-    
-    local menuCorner = Instance.new("UICorner")
-    menuCorner.CornerRadius = UDim.new(0, 6)
-    menuCorner.Parent = dropdownMenu
-    
-    local layout = Instance.new("UIListLayout")
-    layout.SortOrder = Enum.SortOrder.Name
-    layout.Parent = dropdownMenu
-    
-    local selectedMusic = nil
-    
-    local function UpdateDropdown()
-        for _, child in pairs(dropdownMenu:GetChildren()) do
-            if child:IsA("TextButton") then
-                child:Destroy()
-            end
-        end
-        
-        for i, music in pairs(localMusicList) do
-            local option = Instance.new("TextButton")
-            option.Name = "Option" .. i
-            option.Size = UDim2.new(1, -8, 0, 30)
-            option.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
-            option.Text = music.title or music.name
-            option.TextColor3 = Color3.new(1, 1, 1)
-            option.TextScaled = true
-            option.Font = Enum.Font.JosefinSans
-            option.BorderSizePixel = 0
-            option.Parent = dropdownMenu
-            
-            local optCorner = Instance.new("UICorner")
-            optCorner.CornerRadius = UDim.new(0, 4)
-            optCorner.Parent = option
-            
-            option.MouseButton1Click:Connect(function()
-                selectedMusic = music
-                dropdownBtn.Text = music.title or music.name
-                dropdownMenu.Visible = false
-                dropdownMenu.Size = UDim2.new(0, 180, 0, 0)
-            end)
-            
-            option.MouseEnter:Connect(function()
-                option.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
-            end)
-            
-            option.MouseLeave:Connect(function()
-                option.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
-            end)
-        end
-        
-        dropdownMenu.CanvasSize = UDim2.new(0, 0, 0, #localMusicList * 30)
-    end
-    
-    dropdownBtn.MouseButton1Click:Connect(function()
-        dropdownMenu.Visible = not dropdownMenu.Visible
-        if dropdownMenu.Visible then
-            dropdownMenu.Size = UDim2.new(0, 180, 0, math.min(150, #localMusicList * 30))
-            dropdownBtn.Text = "Fechar Lista ▲"
-        else
-            dropdownMenu.Size = UDim2.new(0, 180, 0, 0)
-            dropdownBtn.Text = "Selecionar Música Local ▼"
-        end
-    end)
-    
-    refreshBtn.MouseButton1Click:Connect(function()
-        ScanLocalMusic()
-        UpdateDropdown()
-        print("🔄 Lista de músicas atualizada!")
-    end)
-    
-    return selectorFrame, loadBtn, selectedMusic, UpdateDropdown
+   local selectorFrame = Instance.new("Frame")
+   selectorFrame.Name = "MusicSelector"
+   selectorFrame.Size = UDim2.new(0, 300, 0, 80)
+   selectorFrame.Position = UDim2.new(0, 30, 0, 30)
+   selectorFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+   selectorFrame.BorderSizePixel = 0
+   selectorFrame.Parent = parent
+   
+   local selectorCorner = Instance.new("UICorner")
+   selectorCorner.CornerRadius = UDim.new(0, 12)
+   selectorCorner.Parent = selectorFrame
+   
+   local selectorGlow = Instance.new("UIStroke")
+   selectorGlow.Color = Color3.fromRGB(100, 150, 255)
+   selectorGlow.Thickness = 2
+   selectorGlow.Transparency = 0.4
+   selectorGlow.Parent = selectorFrame
+   
+   local dropdownBtn = Instance.new("TextButton")
+   dropdownBtn.Name = "DropdownButton"
+   dropdownBtn.Size = UDim2.new(0, 180, 0, 35)
+   dropdownBtn.Position = UDim2.new(0, 10, 0, 10)
+   dropdownBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 40)
+   dropdownBtn.Text = "Selecionar Música Local ▼"
+   dropdownBtn.TextColor3 = Color3.new(1, 1, 1)
+   dropdownBtn.TextScaled = true
+   dropdownBtn.Font = Enum.Font.JosefinSans
+   dropdownBtn.BorderSizePixel = 0
+   dropdownBtn.Parent = selectorFrame
+   
+   local dropCorner = Instance.new("UICorner")
+   dropCorner.CornerRadius = UDim.new(0, 8)
+   dropCorner.Parent = dropdownBtn
+   
+   local loadBtn = Instance.new("TextButton")
+   loadBtn.Name = "LoadButton"
+   loadBtn.Size = UDim2.new(0, 80, 0, 35)
+   loadBtn.Position = UDim2.new(0, 200, 0, 10)
+   loadBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 100)
+   loadBtn.Text = "Carregar"
+   loadBtn.TextColor3 = Color3.new(1, 1, 1)
+   loadBtn.TextScaled = true
+   loadBtn.Font = Enum.Font.JosefinSans
+   loadBtn.BorderSizePixel = 0
+   loadBtn.Parent = selectorFrame
+   
+   local loadCorner = Instance.new("UICorner")
+   loadCorner.CornerRadius = UDim.new(0, 8)
+   loadCorner.Parent = loadBtn
+   
+   local refreshBtn = Instance.new("TextButton")
+   refreshBtn.Name = "RefreshButton"
+   refreshBtn.Size = UDim2.new(0, 280, 0, 25)
+   refreshBtn.Position = UDim2.new(0, 10, 0, 50)
+   refreshBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
+   refreshBtn.Text = "🔄 Atualizar Lista"
+   refreshBtn.TextColor3 = Color3.new(1, 1, 1)
+   refreshBtn.TextScaled = true
+   refreshBtn.Font = Enum.Font.JosefinSans
+   refreshBtn.BorderSizePixel = 0
+   refreshBtn.Parent = selectorFrame
+   
+   local refreshCorner = Instance.new("UICorner")
+   refreshCorner.CornerRadius = UDim.new(0, 6)
+   refreshCorner.Parent = refreshBtn
+   
+   local dropdownMenu = Instance.new("ScrollingFrame")
+   dropdownMenu.Name = "DropdownMenu"
+   dropdownMenu.Size = UDim2.new(0, 180, 0, 0)
+   dropdownMenu.Position = UDim2.new(0, 10, 0, 45)
+   dropdownMenu.BackgroundColor3 = Color3.fromRGB(20, 20, 35)
+   dropdownMenu.BorderSizePixel = 0
+   dropdownMenu.Visible = false
+   dropdownMenu.ScrollBarThickness = 4
+   dropdownMenu.Parent = selectorFrame
+   
+   local menuCorner = Instance.new("UICorner")
+   menuCorner.CornerRadius = UDim.new(0, 6)
+   menuCorner.Parent = dropdownMenu
+   
+   local layout = Instance.new("UIListLayout")
+   layout.SortOrder = Enum.SortOrder.Name
+   layout.Parent = dropdownMenu
+   
+   local selectedMusicRef = {current = nil}
+   
+   local function UpdateDropdown()
+       for _, child in pairs(dropdownMenu:GetChildren()) do
+           if child:IsA("TextButton") then
+               child:Destroy()
+           end
+       end
+       
+       for i, music in pairs(localMusicList) do
+           local option = Instance.new("TextButton")
+           option.Name = "Option" .. i
+           option.Size = UDim2.new(1, -8, 0, 30)
+           option.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+           option.Text = music.title or music.name
+           option.TextColor3 = Color3.new(1, 1, 1)
+           option.TextScaled = true
+           option.Font = Enum.Font.JosefinSans
+           option.BorderSizePixel = 0
+           option.Parent = dropdownMenu
+           
+           local optCorner = Instance.new("UICorner")
+           optCorner.CornerRadius = UDim.new(0, 4)
+           optCorner.Parent = option
+           
+           option.MouseButton1Click:Connect(function()
+               selectedMusicRef.current = music -- CORREÇÃO: Usar referência compartilhada
+               dropdownBtn.Text = music.title or music.name
+               dropdownMenu.Visible = false
+               dropdownMenu.Size = UDim2.new(0, 180, 0, 0)
+               print("🎵 Música selecionada: " .. (music.title or music.name))
+           end)
+           
+           option.MouseEnter:Connect(function()
+               option.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
+           end)
+           
+           option.MouseLeave:Connect(function()
+               option.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+           end)
+       end
+       
+       dropdownMenu.CanvasSize = UDim2.new(0, 0, 0, #localMusicList * 30)
+   end
+   
+   dropdownBtn.MouseButton1Click:Connect(function()
+       dropdownMenu.Visible = not dropdownMenu.Visible
+       if dropdownMenu.Visible then
+           dropdownMenu.Size = UDim2.new(0, 180, 0, math.min(150, #localMusicList * 30))
+           dropdownBtn.Text = "Fechar Lista ▲"
+       else
+           dropdownMenu.Size = UDim2.new(0, 180, 0, 0)
+           dropdownBtn.Text = "Selecionar Música Local ▼"
+       end
+   end)
+   
+   refreshBtn.MouseButton1Click:Connect(function()
+       ScanLocalMusic()
+       UpdateDropdown()
+       selectedMusicRef.current = nil 
+       dropdownBtn.Text = "Selecionar Música Local ▼"
+       print("🔄 Lista de músicas atualizada!")
+   end)
+   
+   return selectorFrame, loadBtn, selectedMusicRef, UpdateDropdown
 end
 
 local function CreateModernUI(parent)
@@ -829,7 +832,7 @@ local function CreateMusicPlayer()
     print("🖼️ Criando interface...")
     local gui = CreateProtectedGUI()
     local lyricsDisplay = CreateLyricsDisplay(gui)
-    local musicSelector, loadBtn, selectedMusic, updateDropdown = CreateMusicSelector(gui)
+    local musicSelector, loadBtn, selectedMusicRef, updateDropdown = CreateMusicSelector(gui)
     local uiContainer, albumArt, songTitle, artistLabel, progressBar, timeDisplay, playBtn, stopBtn, hideBtn, eqToggleBtn, particleToggleBtn = CreateModernUI(gui)
     local eqFrame, eqBars = CreateEqualizer(gui)
     local particles, particleContainer = CreateParticleSystem(gui)
@@ -1372,22 +1375,20 @@ local function PlayMusic()
         PlayMusic()
     end
 end)
+
+
+loadBtn.MouseButton1Click:Connect(function()
+    if selectedMusicRef.current then
+        print("🎵 Carregando música selecionada: " .. (selectedMusicRef.current.title or selectedMusicRef.current.name))
+        LoadMusic(selectedMusicRef.current, true)
+    else
+        print("⚠️ Nenhuma música selecionada no dropdown!")
+        loadBtn.Text = "Selecione!"
+        wait(1.5)
+        loadBtn.Text = "Carregar"
+    end
+end)
     
-    loadBtn.MouseButton1Click:Connect(function()
-        local currentSelection = nil
-        for _, music in pairs(localMusicList) do
-            if songTitle.Text:find(music.title or music.name) or songTitle.Text:find(music.name) then
-                currentSelection = music
-                break
-            end
-        end
-        
-        if currentSelection then
-            LoadMusic(currentSelection, true)
-        else
-            print("⚠️ Nenhuma música selecionada!")
-        end
-    end)
     
     stopBtn.MouseButton1Click:Connect(StopMusic)
     hideBtn.MouseButton1Click:Connect(ToggleUI)
