@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revolta das Vassouras - 1924</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+        }
+        
+        .slide {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 80px;
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            font-size: 3.5rem;
+            margin-bottom: 40px;
+            border-bottom: 4px solid white;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            margin-top: 35px;
+            color: #ffd700;
+        }
+        
+        p, li {
+            font-size: 1.8rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .texto-leitura {
+            background: rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            backdrop-filter: blur(10px);
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        li {
+            margin-bottom: 15px;
+        }
+        
+        li::before {
+            content: "▸ ";
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        
+        .subtitle {
+            font-size: 2.5rem;
+            opacity: 0.9;
+            margin-top: 20px;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+        
+        .highlight {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .slide-capa {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .slide-capa h1 {
+            font-size: 6rem;
+            margin-bottom: 40px;
+        }
+        
+        .destaque-numero {
+            font-size: 5rem;
+            text-align: center;
+            margin: 60px 0;
+            font-weight: bold;
+        }
+        
+        .box-info {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #ffd700;
+        }
+        
+        /* Responsive Design */
+        @media screen and (max-width: 1200px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.8rem; }
+            h3 { font-size: 2rem; }
+            p, li { font-size: 1.5rem; }
+            .texto-leitura { font-size: 1.4rem; }
+            .slide-capa h1 { font-size: 4.5rem; }
+            .destaque-numero { font-size: 4rem; }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .slide {
+                padding: 40px 30px;
+                min-height: auto;
+            }
+            
+            h1 { font-size: 2.5rem; }
+            h2 { 
+                font-size: 2rem; 
+                margin-bottom: 25px;
+            }
+            h3 { font-size: 1.6rem; }
+            p, li { font-size: 1.2rem; }
+            .texto-leitura { 
+                font-size: 1.1rem;
+                padding: 20px;
+            }
+            .subtitle { font-size: 1.6rem; }
+            .slide-capa h1 { font-size: 3rem; }
+            .destaque-numero { font-size: 3rem; }
+            
+            .footer {
+                font-size: 1rem;
+                bottom: 20px;
+                right: 30px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .slide {
+                padding: 30px 20px;
+            }
+            
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.7rem; }
+            h3 { font-size: 1.4rem; }
+            p, li { font-size: 1rem; }
+            .texto-leitura { 
+                font-size: 0.95rem;
+                padding: 15px;
+            }
+            .subtitle { font-size: 1.3rem; }
+            .slide-capa h1 { font-size: 2.2rem; }
+            .destaque-numero { font-size: 2.5rem; }
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .slide {
+                page-break-after: always;
+                margin: 0;
+                min-height: 297mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1 - CAPA -->
+<div class="slide slide-capa">
+    <div class="slide-content">
+        <h1>A Revolta das Vassouras</h1>
+        <p class="subtitle">Um Levante Popular em 1924</p>
+        <p style="margin-top: 60px; font-size: 2rem;">Rio de Janeiro - República Velha</p>
+    </div>
+</div>
+
+<!-- SLIDE 2 - INTRODUÇÃO -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>O que foi?</h2>
+        <p>A Revolta das Vassouras foi um <span class="highlight">levante popular espontâneo</span> que ocorreu em dezembro de 1924, no bairro de Santa Cruz, Rio de Janeiro.</p>
+        
+        <div class="texto-leitura">
+            <p>Durante a República Velha, o Brasil vivia sob forte tensão social. O governo de Artur Bernardes era marcado pelo autoritarismo, estado de sítio constante e repressão aos movimentos populares. A população pobre dos subúrbios cariocas enfrentava condições extremamente difíceis: falta de saneamento básico, desemprego crescente, salários baixíssimos e, principalmente, uma inflação galopante que tornava os alimentos cada vez mais caros e inacessíveis.</p>
+            
+            <p>Nesse contexto de desespero e fome, a população de Santa Cruz decidiu reagir. O nome "Revolta das Vassouras" surgiu porque os manifestantes, sem acesso a armas de fogo, pegaram o que tinham em casa - vassouras, paus, enxadas, pedras - e foram às ruas protestar contra a exploração dos comerciantes locais e a indiferença do governo diante de seu sofrimento.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 2</div>
+</div>
+
+<!-- SLIDE 3 - DATA E LOCALIZAÇÃO -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Data e Localização</h2>
+        <ul>
+            <li><strong>Início:</strong> 13 de dezembro de 1924</li>
+            <li><strong>Fim:</strong> 16 de dezembro de 1924</li>
+            <li><strong>Duração:</strong> 3 dias de intensos confrontos</li>
+            <li><strong>Local:</strong> Santa Cruz e bairros adjacentes</li>
+            <li><strong>Cidade:</strong> Rio de Janeiro (então capital federal)</li>
+        </ul>
+        
+        <div class="texto-leitura">
+            <p>Santa Cruz, na época, era uma região predominantemente rural e operária, localizada nos subúrbios distantes do centro do Rio de Janeiro. A área concentrava trabalhadores de baixa renda, muitos deles empregados na Estrada de Ferro Central do Brasil, em pequenas fábricas e no trabalho braçal. A infraestrutura era precária, com ruas sem pavimentação, falta de iluminação pública e serviços básicos inexistentes.</p>
+            
+            <p>O bairro estava particularmente vulnerável aos aumentos abusivos de preços porque dependia de poucos comerciantes locais para o abastecimento de alimentos e produtos essenciais. Essa dependência criou uma situação de monopólio informal, onde os comerciantes podiam cobrar preços exorbitantes sem que a população tivesse alternativas.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 3</div>
+</div>
+
+<!-- SLIDE 4 - LIDERANÇA -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Liderança</h2>
+        <p><span class="highlight">Movimento sem líderes formais identificados</span></p>
+        
+        <div class="texto-leitura">
+            <p>A Revolta das Vassouras foi genuinamente popular e espontânea, sem uma hierarquia estabelecida ou lideranças formalmente reconhecidas. Isso diferenciava o movimento de outras revoltas organizadas do período, como a Revolta Tenentista que ocorria simultaneamente em outras regiões do país.</p>
+            
+            <p>Os participantes eram pessoas comuns: trabalhadores braçais que carregavam peso no porto e nas estações de trem, donas de casa que lutavam diariamente para alimentar suas famílias, ferroviários com salários miseráveis, lavadeiras que trabalhavam de sol a sol, desempregados que vagavam pelas ruas sem perspectiva, e até mesmo crianças e idosos que se uniram ao movimento.</p>
+            
+            <p>A ausência de liderança formal foi, paradoxalmente, uma força e uma fraqueza do movimento. Por um lado, demonstrou a união e o desespero genuínos da população. Por outro, dificultou a negociação com as autoridades e a organização de uma estratégia de resistência mais eficaz contra a repressão governamental.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 4</div>
+</div>
+
+<!-- SLIDE 5 - FORMAS DE RESISTÊNCIA -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Formas de Resistência</h2>
+        
+        <div class="box-info">
+            <h3>Armas e Táticas</h3>
+            <ul>
+                <li>Armas improvisadas: <strong>vassouras, paus, pedras, enxadas</strong></li>
+                <li>Saques organizados a armazéns com preços abusivos</li>
+                <li>Destruição de propriedades de comerciantes exploradores</li>
+                <li>Bloqueio de vias públicas e da linha férrea</li>
+                <li>Confronto direto com forças policiais</li>
+                <li>Formação de barricadas improvisadas</li>
+            </ul>
+        </div>
+        
+        <div class="texto-leitura">
+            <p>A forma de resistência escolhida pelos revoltosos refletia sua condição social. Sem acesso a armas de fogo ou treinamento militar, a população usou o que tinha à mão. As vassouras, que deram nome ao movimento, tornaram-se símbolo da revolta - representavam tanto a humildade dos participantes quanto sua determinação em lutar com o que possuíam.</p>
+            
+            <p>Os saques não eram aleatórios. Os manifestantes tinham alvos específicos: os armazéns e mercearias que praticavam preços abusivos e exploravam a necessidade da população. Testemunhos da época relatam que os revoltosos distribuíam entre si os alimentos saqueados, priorizando famílias com crianças pequenas e idosos.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 5</div>
+</div>
+
+<!-- SLIDE 6 - PARTICIPAÇÃO -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Número de Participantes</h2>
+        <p class="destaque-numero">
+            <span class="highlight">2.000 a 3.000</span>
+        </p>
+        <p style="text-align: center; font-size: 2rem;">pessoas participaram ativamente do movimento</p>
+        
+        <div class="texto-leitura">
+            <p>Estimar o número exato de participantes é difícil devido à natureza espontânea e descentralizada da revolta. Os registros policiais da época, que tendem a minimizar a participação popular, falam em cerca de 2.000 pessoas. Já relatos de jornais e testemunhas sugerem que o número pode ter chegado a 3.000 ou até mais participantes ativos.</p>
+            
+            <p>Além dos participantes diretos que foram às ruas, havia uma rede de apoio significativa. Moradores que não puderam participar ativamente forneciam água, comida e abrigo aos manifestantes. Mulheres organizavam pontos de primeiros socorros improvisados para cuidar dos feridos. Essa solidariedade comunitária foi fundamental para que o movimento durasse três dias.</p>
+            
+            <p>Vale destacar a forte presença feminina na revolta. Mulheres não apenas participaram dos protestos, mas frequentemente estavam na linha de frente, pois eram elas que lidavam diariamente com a impossibilidade de comprar comida para alimentar suas famílias.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 6</div>
+</div>
+
+<!-- SLIDE 7 - CONSEQUÊNCIAS -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Consequências</h2>
+        
+        <div class="box-info">
+            <h3>Para os participantes:</h3>
+            <ul>
+                <li>Dezenas de pessoas presas e processadas</li>
+                <li>Muitos feridos graves nos confrontos</li>
+                <li>Perda de casas e empregos em retaliação</li>
+                <li>Famílias desfeitas e perseguidas</li>
+            </ul>
+        </div>
+        
+        <div class="box-info">
+            <h3>Para a sociedade brasileira:</h3>
+            <ul>
+                <li>Exposição nacional das desigualdades sociais</li>
+                <li>Revelou condições desumanas da população pobre</li>
+                <li>Alimentou debates sobre justiça social</li>
+                <li>Inspirou outros movimentos populares</li>
+            </ul>
+        </div>
+        
+        <div class="texto-leitura">
+            <p>As consequências imediatas foram severas. O governo Bernardes não teve piedade: dezenas de participantes foram presos em condições degradantes, muitos perderam seus empregos (especialmente os ferroviários identificados), e algumas famílias foram despejadas de suas casas como forma de retaliação.</p>
+            
+            <p>No entanto, a revolta teve um impacto mais amplo. Pela primeira vez, a questão social dos subúrbios cariocas ganhou destaque nacional. Jornais de todo o país noticiaram o evento, e intelectuais da época passaram a debater as condições de vida das classes trabalhadoras urbanas com mais intensidade.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 7</div>
+</div>
+
+<!-- SLIDE 8 - O FIM -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Como Terminou?</h2>
+        
+        <div class="texto-leitura">
+            <p>Após três dias de protestos que abalaram a capital federal, o governo decidiu agir com máxima violência. O presidente Artur Bernardes, que já governava sob estado de sítio permanente, ordenou uma operação militar de grande escala para sufocar completamente o movimento.</p>
+            
+            <p>Tropas do Exército foram mobilizadas e cercaram completamente Santa Cruz e os bairros adjacentes. Com fuzis, metralhadoras e até artilharia leve, as forças governamentais tinham superioridade esmagadora sobre os manifestantes armados apenas com paus e pedras. A repressão foi brutal e indiscriminada - casas foram invadidas, pessoas foram espancadas nas ruas, e qualquer suspeito de participação foi preso imediatamente.</p>
+            
+            <p>Os confrontos finais foram sangrentos. Manifestantes tentaram resistir usando barricadas improvisadas e conhecimento do terreno local, mas a diferença de armamento era decisiva. No final da tarde de 16 de dezembro de 1924, a revolta estava completamente sufocada. As ruas de Santa Cruz, que três dias antes fervilhavam de protesto e esperança, ficaram vazias e silenciosas sob ocupação militar.</p>
+            
+            <p>Prisões em massa continuaram nos dias seguintes. A polícia vasculhou o bairro procurando "líderes" inexistentes e fazendo prisões arbitrárias. Muitas famílias preferiram fugir para outras regiões do Rio, temendo perseguição contínua.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 8</div>
+</div>
+
+<!-- SLIDE 9 - IMPORTÂNCIA HISTÓRICA -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Importância Histórica</h2>
+        
+        <div class="texto-leitura">
+            <p>A Revolta das Vassouras, embora tenha durado apenas três dias e sido violentamente reprimida, representa um momento crucial na história das lutas populares brasileiras. O movimento demonstrou que mesmo a população mais pobre e desorganizada, quando levada ao limite do desespero, era capaz de se unir e enfrentar o poder estabelecido.</p>
+            
+            <p>O simbolismo das vassouras é particularmente poderoso: instrumentos simples do cotidiano transformados em armas de resistência. Essa imagem captura a essência da luta popular - pessoas comuns usando o que têm à disposição para defender sua dignidade e o direito básico de sobreviver.</p>
+            
+            <p>Historicamente, a revolta expôs as profundas contradições da República Velha. Enquanto as elites políticas e econômicas desfrutavam de luxos na área central do Rio de Janeiro, a poucos quilômetros de distância, nos subúrbios, a população morria de fome e vivia em condições sub-humanas. Essa desigualdade extrema não podia mais ser ignorada após o levante.</p>
+            
+            <p>O movimento também antecipou temas que se tornariam centrais na política brasileira das décadas seguintes: a questão social urbana, os direitos trabalhistas, a necessidade de políticas públicas para as periferias, e o papel do Estado na garantia de condições mínimas de vida para todos os cidadãos.</p>
+            
+            <p>Embora muitos dos participantes tenham sofrido consequências terríveis, sua coragem não foi em vão. A Revolta das Vassouras entrou para a história como testemunho da capacidade de resistência popular e da luta contínua por justiça social no Brasil.</p>
+        </div>
+    </div>
+    <div class="footer">Slide 9</div>
+</div>
+
+<!-- SLIDE 10 - ENCERRAMENTO -->
+<div class="slide slide-capa">
+    <div class="slide-content">
+        <h1>Obrigado!</h1>
+        <p class="subtitle" style="margin-top: 60px;">Revolta das Vassouras - 1924</p>
+        <p style="margin-top: 40px; font-size: 1.8rem;">"A história da luta popular por dignidade"</p>
+        <div class="texto-leitura" style="margin-top: 60px; text-align: left;">
+            <p><strong>Reflexão final:</strong> A Revolta das Vassouras nos lembra que a luta por dignidade e justiça social é contínua. Mesmo quando os movimentos populares são reprimidos, suas causas permanecem vivas e inspiram novas gerações a continuar lutando por uma sociedade mais justa e igualitária.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
