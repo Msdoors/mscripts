@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Lua Obfuscator</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mod-menu-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mod-menu-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+
+        .iframe-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-upload {
+            border: 2px dashed #667eea;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-upload:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-upload-icon {
+            color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .mod-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .mod-menu.active {
+            display: block;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .mod-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mod-item-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: #667eea;
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i data-lucide="rocket"></i>
+                Enhanced Lua Obfuscator
+            </h1>
+            <button class="mod-menu-btn" onclick="toggleModMenu()">
+                <i data-lucide="settings"></i>
+                Mod Menu
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="iframe-container">
+                <iframe id="obfuscator-frame" src="https://wearedevs.net/obfuscator" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+            </div>
+
+            <div class="side-panel">
+                <div class="panel-section">
+                    <h2>
+                        <i data-lucide="folder"></i>
+                        Upload Script
+                    </h2>
+                    <div class="file-upload" onclick="document.getElementById('file-input').click()">
+                        <i data-lucide="file-text" class="file-upload-icon" style="width: 48px; height: 48px;"></i>
+                        <p>Click to upload .lua or .txt file</p>
+                        <input type="file" id="file-input" accept=".lua,.txt" onchange="handleFileUpload(event)">
+                    </div>
+                    <div id="upload-status" class="status"></div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>
+                        <i data-lucide="zap"></i>
+                        Quick Actions
+                    </h2>
+                    <button class="btn btn-primary" onclick="injectScript()">
+                        <i data-lucide="edit"></i>
+                        Inject to Editor
+                    </button>
+                    <button class="btn btn-success" onclick="autoObfuscate()">
+                        <i data-lucide="lock"></i>
+                        Auto Obfuscate
+                    </button>
+                    <button class="btn btn-warning" onclick="extractOutput()">
+                        <i data-lucide="clipboard"></i>
+                        Extract Output
+                    </button>
+                    <button class="btn btn-danger" onclick="clearAll()">
+                        <i data-lucide="trash-2"></i>
+                        Clear All
+                    </button>
+                </div>
+
+                <div class="panel-section">
+                    <h2>
+                        <i data-lucide="bar-chart"></i>
+                        Stats
+                    </h2>
+                    <div class="stats-item">
+                        <i data-lucide="hash"></i>
+                        <strong>Script Length:</strong> <span id="script-length">0</span> chars
+                    </div>
+                    <div class="stats-item">
+                        <i data-lucide="align-justify"></i>
+                        <strong>Lines:</strong> <span id="script-lines">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <i data-lucide="activity"></i>
+                        <strong>Status:</strong> <span id="obf-status">Ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleModMenu()"></div>
+    <div class="mod-menu" id="mod-menu">
+        <h2 style="color: #667eea; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="sliders"></i>
+            Mod Menu
+        </h2>
+        
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="infinity"></i>
+                <span>Remove Character Limit</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-no-limit" onchange="toggleMod('noLimit', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="copy"></i>
+                <span>Auto Copy Output</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-auto-copy" onchange="toggleMod('autoCopy', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="zap"></i>
+                <span>Instant Obfuscation</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-instant" onchange="toggleMod('instant', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="moon"></i>
+                <span>Dark Mode Injection</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-dark" onchange="toggleMod('darkMode', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="download"></i>
+                <span>Auto Save Downloads</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-auto-save" onchange="toggleMod('autoSave', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="shield-off"></i>
+                <span>Bypass Rate Limits</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-bypass" onchange="toggleMod('bypass', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="sparkles"></i>
+                <span>Enhanced Performance</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-performance" onchange="toggleMod('performance', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="mod-item">
+            <div class="mod-item-label">
+                <i data-lucide="refresh-cw"></i>
+                <span>Auto Refresh Frame</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="mod-refresh" onchange="toggleMod('autoRefresh', this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <button class="btn btn-danger" onclick="toggleModMenu()" style="margin-top: 20px;">
+            <i data-lucide="x"></i>
+            Close
+        </button>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentScript = '';
+        const mods = {
+            noLimit: false,
+            autoCopy: false,
+            instant: false,
+            darkMode: false,
+            autoSave: false,
+            bypass: false,
+            performance: false,
+            autoRefresh: false
+        };
+
+        function toggleModMenu() {
+            const menu = document.getElementById('mod-menu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function toggleMod(modName, enabled) {
+            mods[modName] = enabled;
+            showStatus(`${modName} ${enabled ? 'enabled' : 'disabled'}`, 'info');
+            
+            if (modName === 'darkMode' && enabled) {
+                injectDarkMode();
+            }
+            if (modName === 'noLimit' && enabled) {
+                removeCharacterLimit();
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentScript = e.target.result;
+                updateStats();
+                showStatus(`File loaded: ${file.name}`, 'success');
+            };
+            reader.onerror = function() {
+                showStatus('Error reading file', 'error');
+            };
+            reader.readAsText(file);
+        }
+
+        function injectScript() {
+            if (!currentScript) {
+                showStatus('No script loaded', 'error');
+                return;
+            }
+
+            try {
+                const iframe = document.getElementById('obfuscator-frame');
+                iframe.contentWindow.postMessage({
+                    type: 'injectScript',
+                    script: currentScript
+                }, '*');
+                showStatus('Script injected successfully', 'success');
+            } catch (e) {
+                showStatus('Failed to inject script', 'error');
+            }
+        }
+
+        function autoObfuscate() {
+            if (!currentScript) {
+                showStatus('No script loaded', 'error');
+                return;
+            }
+
+            injectScript();
+            setTimeout(() => {
+                try {
+                    const iframe = document.getElementById('obfuscator-frame');
+                    iframe.contentWindow.postMessage({
+                        type: 'clickObfuscate'
+                    }, '*');
+                    showStatus('Obfuscation started', 'info');
+                } catch (e) {
+                    showStatus('Failed to start obfuscation', 'error');
+                }
+            }, 500);
+        }
+
+        function extractOutput() {
+            try {
+                const iframe = document.getElementById('obfuscator-frame');
+                iframe.contentWindow.postMessage({
+                    type: 'getOutput'
+                }, '*');
+                showStatus('Extracting output...', 'info');
+            } catch (e) {
+                showStatus('Failed to extract output', 'error');
+            }
+        }
+
+        function clearAll() {
+            currentScript = '';
+            document.getElementById('file-input').value = '';
+            updateStats();
+            showStatus('All cleared', 'success');
+            
+            try {
+                const iframe = document.getElementById('obfuscator-frame');
+                iframe.contentWindow.postMessage({
+                    type: 'clearAll'
+                }, '*');
+            } catch (e) {}
+        }
+
+        function updateStats() {
+            document.getElementById('script-length').textContent = currentScript.length;
+            document.getElementById('script-lines').textContent = currentScript.split('\n').length;
+        }
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('upload-status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            
+            setTimeout(() => {
+                statusEl.className = 'status';
+            }, 3000);
+        }
+
+        function injectDarkMode() {
+            try {
+                const iframe = document.getElementById('obfuscator-frame');
+                iframe.contentWindow.postMessage({
+                    type: 'injectCSS',
+                    css: `
+                        body { background: #1a1a1a !important; color: #fff !important; }
+                        .wrapper, main, section { background: #2d2d2d !important; color: #fff !important; }
+                    `
+                }, '*');
+                showStatus('Dark mode injected', 'success');
+            } catch (e) {
+                showStatus('Failed to inject dark mode', 'error');
+            }
+        }
+
+        function removeCharacterLimit() {
+            try {
+                const iframe = document.getElementById('obfuscator-frame');
+                iframe.contentWindow.postMessage({
+                    type: 'removeLimit'
+                }, '*');
+                showStatus('Character limit removed', 'success');
+            } catch (e) {
+                showStatus('Failed to remove limit', 'error');
+            }
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'outputExtracted') {
+                currentScript = event.data.output;
+                updateStats();
+                
+                if (mods.autoCopy) {
+                    navigator.clipboard.writeText(event.data.output);
+                    showStatus('Output copied to clipboard', 'success');
+                }
+                
+                if (mods.autoSave) {
+                    const blob = new Blob([event.data.output], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `obfuscated_${Date.now()}.lua`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showStatus('Output auto-saved', 'success');
+                }
+            }
+        });
+
+        setInterval(() => {
+            if (mods.autoRefresh) {
+                const iframe = document.getElementById('obfuscator-frame');
+                iframe.src = iframe.src;
+            }
+        }, 300000);
+
+        document.getElementById('obf-status').textContent = 'Ready';
+    </script>
+</body>
+</html>
