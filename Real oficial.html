@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua Obfuscator API - Teste</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        textarea {
+            flex: 1;
+            min-height: 400px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .controls {
+            padding: 0 30px 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload label {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+        }
+
+        .file-upload label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .file-upload label:active {
+            transform: translateY(0);
+        }
+
+        .file-name {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 300px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .status {
+            padding: 15px;
+            margin: 0 30px 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card p {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Lua/Luau Obfuscator API</h1>
+            <p>Ofusque seu código mantendo a funcionalidade original</p>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="controls">
+            <div class="input-group">
+                <label for="apiUrl">URL da API:</label>
+                <input type="text" id="apiUrl" placeholder="https://seu-projeto.vercel.app/api/obfuscate" value="http://localhost:3000/api/obfuscate">
+            </div>
+            
+            <div class="file-upload">
+                <input type="file" id="fileInput" accept=".lua,.luau,.txt" onchange="loadFile(event)">
+                <label for="fileInput">📁 Carregar Arquivo</label>
+            </div>
+            
+            <span class="file-name" id="fileName" style="display: none;"></span>
+            
+            <button onclick="obfuscate()" id="obfuscateBtn">🚀 Ofuscar Código</button>
+            <button onclick="copyResult()">📋 Copiar Resultado</button>
+            <button onclick="downloadResult()">💾 Baixar Resultado</button>
+            <button onclick="clearAll()">🗑️ Limpar Tudo</button>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat-card">
+                <h3>Linhas Original</h3>
+                <p id="originalLines">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Tamanho Final</h3>
+                <p id="finalSize">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Tempo</h3>
+                <p id="processTime">0ms</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>📝 Código Original</h2>
+                <textarea id="input" placeholder="Cole seu código Lua/Luau aqui...
+
+Exemplo:
+local function teste()
+    print('Hello World')
+end
+
+shared.minhaFuncao = teste
+teste()"></textarea>
+            </div>
+
+            <div class="section">
+                <h2>🔐 Código Ofuscado</h2>
+                <textarea id="output" readonly placeholder="O código ofuscado aparecerá aqui..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFileName = '';
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const validExtensions = ['.lua', '.luau', '.txt'];
+            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+            if (!validExtensions.includes(fileExtension)) {
+                showStatus('❌ Formato inválido! Use apenas .lua, .luau ou .txt', 'error');
+                event.target.value = '';
+                return;
+            }
+
+            currentFileName = file.name;
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                document.getElementById('input').value = e.target.result;
+                document.getElementById('fileName').textContent = '📄 ' + file.name;
+                document.getElementById('fileName').style.display = 'inline-block';
+                showStatus('✅ Arquivo "' + file.name + '" carregado com sucesso!', 'success');
+            };
+
+            reader.onerror = function() {
+                showStatus('❌ Erro ao ler o arquivo!', 'error');
+            };
+
+            reader.readAsText(file);
+        }
+
+        function downloadResult() {
+            const output = document.getElementById('output').value;
+            if (!output) {
+                showStatus('❌ Nada para baixar!', 'error');
+                return;
+            }
+
+            const originalName = currentFileName || 'script.lua';
+            const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+            const extension = originalName.substring(originalName.lastIndexOf('.')) || '.lua';
+            const newFileName = nameWithoutExt + '_obfuscated' + extension;
+
+            const blob = new Blob([output], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = newFileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            showStatus('✅ Arquivo "' + newFileName + '" baixado!', 'success');
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+
+        async function obfuscate() {
+            const input = document.getElementById('input').value;
+            const apiUrl = document.getElementById('apiUrl').value;
+            const output = document.getElementById('output');
+            const btn = document.getElementById('obfuscateBtn');
+
+            if (!input.trim()) {
+                showStatus('Por favor, insira algum código!', 'error');
+                return;
+            }
+
+            if (!apiUrl.trim()) {
+                showStatus('Por favor, insira a URL da API!', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Processando...';
+            showStatus('Ofuscando código...', 'info');
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: input })
+                });
+
+                const data = await response.json();
+                const endTime = Date.now();
+
+                if (data.success) {
+                    output.value = data.obfuscated;
+                    showStatus('✅ Código ofuscado com sucesso!', 'success');
+
+                    document.getElementById('originalLines').textContent = data.original_lines;
+                    document.getElementById('finalSize').textContent = data.obfuscated_length.toLocaleString() + ' chars';
+                    document.getElementById('processTime').textContent = (endTime - startTime) + 'ms';
+                    document.getElementById('stats').style.display = 'grid';
+                } else {
+                    showStatus('❌ Erro: ' + (data.error || 'Erro desconhecido'), 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Erro de conexão: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Ofuscar Código';
+            }
+        }
+
+        function copyResult() {
+            const output = document.getElementById('output');
+            if (!output.value) {
+                showStatus('Nada para copiar!', 'error');
+                return;
+            }
+
+            output.select();
+            document.execCommand('copy');
+            showStatus('✅ Código copiado para a área de transferência!', 'success');
+        }
+
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').value = '';
+            document.getElementById('stats').style.display = 'none';
+            document.getElementById('fileName').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+            currentFileName = '';
+            showStatus('🗑️ Tudo limpo!', 'info');
+        }
+
+        document.getElementById('input').addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 4;
+            }
+        });
+    </script>
+</body>
+</html>
